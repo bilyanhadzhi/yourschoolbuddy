@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito:300,400,700');
+
+/* Global styles */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Nunito', sans-serif;
+}
+
+html, body {
+  min-width: 310px;
+  background-color: #f5f5f5;
+}
+
+a {
+  text-decoration: none;
+  color: initial;
+}
+
+.container {
+  width: 100%;
+  padding: 0 5%;
+  background-color: #f5f5f5;
+}
+
+/* Navbar styles */
+#navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+#navbar ul {
+  list-style-type: none;
+  height: 100%;
+  display: flex;
+}
+
+#navbar ul li {
+  height: 100%;
+  margin-left: 20px;
+}
+
+#navbar ul li a {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: #212121;
+}
+
+.green {
+  color: #558B2F;
+}
+
+#navbar ul li a:hover {
+  color: #558B2F;
+}
+
+/* Login modal styles */
+.auth-container {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 300px;
+  height: 260px;
+}
+
+.longer {
+  height: 300px;
+}
+
+.auth-container h2 {
+  margin: 20px 0;
+}
+
+.auth-tab {
+  width: 100%;
+  padding: 0 10%;
+  margin: 10px 0 0;
+}
+
+.auth-container .auth-tab form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-container .auth-tab form input {
+  width: 100%;
+  height: 32px;
+  margin: 5px 0 0;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 5px;
+  border-radius: 2px;
+}
+
+.auth-container .auth-tab form input:focus {
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  outline: none;
+}
+
+.submit-btn {
+  margin-top: 10px !important;
+  background-color: #33691E;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.auth-tab span, .auth-tab a {
+  font-size: 0.8rem;
+}
+
+.auth-tab .link {
+  color: #1976D2;
+}
+
+.auth-tab .link:hover {
+  color: #0D47A1;
+}
+
+/* Media queries */
+@media screen and (min-width: 800px) {
+  .container {
+    padding: 0 10%;
+  }
+}
