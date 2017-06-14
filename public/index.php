@@ -3,6 +3,7 @@
 <?php
   function getPage($pageName) {
     require_once(SRC_DIR . $pageName);
+    exit;
   }
   function pageNotFound() {
     http_response_code(404);
