@@ -10,7 +10,7 @@
       <input type="submit" name="submit" value="Register" class="submit-btn">
     </form>
     <span>Already have an account?</span>
-    <a href="/login" class="link">Log in</a>
+    <a href="/log_in" class="link">Log in</a>
   </section>
 </section>
 

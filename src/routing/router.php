@@ -13,8 +13,8 @@
         case '':
           $this->url_params_len > 1 ? $this->page_not_found() : $this->get('/home.php');
           break;
-        case 'login':
-          $this->url_params_len > 1 ? $this->page_not_found() : $this->get('/login.php');
+        case 'log_in':
+          $this->url_params_len > 1 ? $this->page_not_found() : $this->get('/log_in.php');
           break;
         case 'register':
           $this->url_params_len > 1 ? $this->page_not_found() : $this->get('/register.php');
