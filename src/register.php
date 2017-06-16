@@ -2,18 +2,19 @@
 <?php require_once(SRC_DIR . '/database/database.php') ?>
 
 <?php
+  $values = ['username' => '', 'email' => '', 'password' => ''];
+
   if (isset($_POST['submit'])) {
     $register_form = new RegisterForm($_POST['username'], $_POST['email'], $_POST['password']);
+    $values = $register_form->get_values();
 
     if (!$register_form->is_valid()) {
-      // TODO: render errors in the template
-      print_r($register_form->get_errors());
-      exit;
+      $flash = $register_form->get_errors();
     } else {
       $db = new Database;
 
-      if (!$db->create_user($_POST['username'], $_POST['email'], $_POST['password'])) {
-        echo 'Username/email already taken';
+      if (!$db->create_user($values['username'], $values['email'], $values['password'])) {
+        $flash[] = 'A user with the same username and/or email address already exists';
       } else {
         echo 'User successfully registered!';
       }
@@ -21,4 +22,4 @@
   }
 ?>
 
-<?php require_once('templates/' . basename(__FILE__, '.php') . '.tpl.php') ?>
+<?php require_once('templates/tpl.' . basename(__FILE__)) ?>

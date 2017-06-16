@@ -37,7 +37,7 @@ a {
 }
 
 #navbar ul {
-  list-style-type: none;
+  list-style: none;
   height: 100%;
   display: flex;
 }
@@ -68,23 +68,10 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
+  margin: 100px auto;
   width: 300px;
-  height: 260px;
-}
-
-.longer {
-  height: 300px;
-}
-
-.auth-container h2 {
-  margin: 20px 0;
+  padding: 20px 0;
 }
 
 .auth-tab {
@@ -130,6 +117,21 @@ a {
 
 .auth-tab .link:hover {
   color: #0D47A1;
+}
+
+.form-flash {
+  color: #333333;
+  font-size: 0.8rem;
+  margin: 10px 0 10px;
+}
+
+.form-flash ul {
+  list-style: none;
+}
+
+.form-flash ul li {
+  font-size: 0.8rem;
+  margin: 5px 0;
 }
 
 /* Media queries */

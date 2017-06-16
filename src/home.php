@@ -1,1 +1,1 @@
-<?php require_once('templates/' . basename(__FILE__, '.php') . '.tpl.php') ?>
+<?php require_once('templates/tpl.' . basename(__FILE__)) ?>

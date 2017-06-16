@@ -9,6 +9,7 @@
       $this->username = $username;
       $this->password = $password;
 
+      $this->sanitize();
       $this->validate();
     }
 
@@ -17,13 +18,24 @@
       $password_len = strlen($this->password);
 
       if ($username_len === 0 || $username_len > 50) {
-        $this->errors['username'] = ['message' => 'Username is not between 1 and 50 characters long'];
+        $this->errors[] = 'Username is not between 1 and 50 characters long';
       }
       if ($password_len === 0 || $password_len > 255) {
-        $this->errors['password'] = ['message' => 'Password is not between 1 and 255 characters long'];
+        $this->errors[] = 'Password is not between 1 and 255 characters long';
       }
 
       $this->set_valid_status($this->errors ? false : true);
+    }
+
+    public function sanitize() {
+      $this->username = preg_replace('/\s+/', '', $this->username);
+    }
+
+    public function get_values() {
+      return [
+        'username' => $this->username,
+        'password' => $this->password,
+      ];
     }
   }
 ?>
