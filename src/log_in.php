@@ -3,6 +3,7 @@
 
 <?php
   $values = ['username' => '', 'password' => ''];
+  $title = 'Log in';
 
   if (isset($_POST['submit'])) {
     $login_form = new LoginForm($_POST['username'], $_POST['password']);

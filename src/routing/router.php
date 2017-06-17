@@ -34,7 +34,7 @@
     public function get($page_name, $protected) {
       $is_logged_in = isset($_SESSION['username']);
 
-      if ($page_name === '/log_in' || $page_name === '/register' && is_logged_in) {
+      if (($page_name === '/log_in.php' || $page_name === '/register.php') && $is_logged_in) {
         $this->redirect_to('/');
       } elseif (!$protected) {
         require_once(SRC_DIR . $page_name);

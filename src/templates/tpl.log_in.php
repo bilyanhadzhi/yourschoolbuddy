@@ -1,4 +1,4 @@
-<?php require_once('includes/header.php'); ?>
+<?php require_once('includes/header.php') ?>
 
 <section class="auth-container">
   <h2 class="green">Log in</h2>
@@ -24,4 +24,4 @@
   </section>
 </section>
 
-<?php require_once('includes/footer.php'); ?>
+<?php require_once('includes/footer.php') ?>

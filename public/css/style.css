@@ -13,17 +13,28 @@
 html, body {
   min-width: 310px;
   background-color: #f5f5f5;
+  color: #333333;
 }
 
 a {
   text-decoration: none;
   color: initial;
+  cursor: pointer;
 }
 
+ul {
+  list-style: none;
+}
+
+/* Helper classes */
+.hover-underline:hover {
+  text-decoration: underline;
+}
+
+/* Container styles */
 .container {
   width: 100%;
-  padding: 0 5%;
-  background-color: #f5f5f5;
+  padding: 20px 5%;
 }
 
 /* Navbar styles */
@@ -44,7 +55,6 @@ a {
 
 #navbar ul li {
   height: 100%;
-  margin-left: 20px;
 }
 
 #navbar ul li a {
@@ -54,11 +64,12 @@ a {
   color: #212121;
 }
 
-.green {
+#navbar ul li a:hover {
   color: #558B2F;
 }
 
-#navbar ul li a:hover {
+/* Color text green */
+.green {
   color: #558B2F;
 }
 
@@ -125,18 +136,65 @@ a {
   margin: 10px 0 10px;
 }
 
-.form-flash ul {
-  list-style: none;
-}
-
 .form-flash ul li {
   font-size: 0.8rem;
   margin: 5px 0;
 }
 
+/* Tests list styles */
+.tests-list {
+  margin-top: 10px;
+}
+
+.tests-list li {
+  padding-left: 30px;
+  font-size: 1.1rem;
+  line-height: 2.5;
+}
+
+/* Button styles */
+.btn {
+  border: none;
+  padding: 5px 15px;
+  font-size: 0.9rem;
+  border-radius: 2px;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+/* 'Add test' buttons styles */
+.add-btn {
+  background-color: #2E7D32;
+  margin-top: 20px;
+}
+
+.add-btn:hover {
+  background-color: #388E3C;
+}
+
+.edit-btn {
+  color: #1565C0;
+}
+
+.edit-btn:hover {
+  color: #1976D2;
+}
+
+.delete-btn {
+  color: #c62828;
+}
+
+.delete-btn:hover {
+  color: #d32f2f;
+}
+
+.btn:focus {
+  outline: none;
+}
+
 /* Media queries */
 @media screen and (min-width: 800px) {
   .container {
-    padding: 0 10%;
+    padding: 20px 20%;
   }
 }

@@ -2,11 +2,7 @@
 <?php require_once(SRC_DIR . '/database/database.php') ?>
 
 <?php
-  if (isset($_SESSION['username'])) {
-    $router = new Router;
-    $router->redirect_to('/');
-  }
-
+  $title = 'Register';
   $values = ['username' => '', 'email' => '', 'password' => ''];
 
   if (isset($_POST['submit'])) {
