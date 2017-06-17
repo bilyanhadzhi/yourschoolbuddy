@@ -22,6 +22,9 @@
         case 'register':
           $this->url_params_len > 1 ? $this->page_not_found() : $this->get('/register.php', false);
           break;
+        case 'add_exam':
+          $this->url_params_len > 1 ? $this->page_not_found() : $this->get('/add_exam.php', true);
+          break;
         default:
           $this->page_not_found();
       }

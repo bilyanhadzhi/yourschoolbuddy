@@ -1,4 +1,6 @@
 <?php require_once(SRC_DIR . '/models/user.php') ?>
+<?php require_once(SRC_DIR . '/models/subject.php') ?>
+<?php require_once(SRC_DIR . '/models/exam.php') ?>
 
 <?php
   class Database {
@@ -21,8 +23,8 @@
 
       $hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
 
-      $sql = "INSERT INTO users (username, email, password)
-              VALUES (:username, :email, :hash)";
+      $sql = 'INSERT INTO users (username, email, password)
+              VALUES (:username, :email, :hash)';
       $query = $this->handler->prepare($sql);
       $query->execute([
         ':username' => $username,
@@ -34,7 +36,8 @@
     }
 
     public function get_user($username) {
-      $sql = 'SELECT * FROM users WHERE username=:username LIMIT 1';
+      $sql = 'SELECT * FROM users
+              WHERE username=:username LIMIT 1';
       $query = $this->handler->prepare($sql);
       $query->execute([':username' => $username]);
       $query->setFetchMode(PDO::FETCH_CLASS, 'User');
@@ -69,6 +72,52 @@
       } else {
         return false;
       }
+    }
+
+    public function get_current_user() {
+      if (isset($_SESSION['username'])) {
+        return $this->get_user($_SESSION['username']);
+      } else {
+        return null;
+      }
+    }
+
+    public function get_subjects() {
+      $sql = 'SELECT * FROM subjects';
+      $query = $this->handler->prepare($sql);
+      $query->execute();
+
+      $query->setFetchMode(PDO::FETCH_CLASS, 'Subject');
+
+      $subjects = $query->fetchAll();
+      return $subjects;
+    }
+
+    public function add_exam($subject_id, $student_id, $type, $date, $grade) {
+      $sql = 'INSERT INTO exams (subject_id, student_id, type, date, grade)
+              VALUES (:subject_id, :student_id, :type, :date, :grade)';
+      $query = $this->handler->prepare($sql);
+      $query->execute([
+        ':subject_id' => $subject_id,
+        ':student_id' => $student_id,
+        ':type' => $type,
+        ':date' => $date,
+        ':grade' => 'NULL',
+      ]);
+    }
+
+    public function get_exams_by_student_id($student_id) {
+      $sql = 'SELECT * FROM exams
+              WHERE student_id=:student_id';
+      $query = $this->handler->prepare($sql);
+      $query->execute([
+        ':student_id' => $student_id,
+      ]);
+
+      $query->setFetchMode(PDO::FETCH_CLASS, 'Exam');
+
+      $exams = $query->fetchAll();
+      return $exams;
     }
   }
 ?>

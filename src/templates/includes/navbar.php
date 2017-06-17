@@ -1,8 +1,10 @@
 <nav class="container" id="navbar">
   <ul>
-    <li>
-      <a href="/">Tests</a>
-    </li>
+    <?php if (isset($_SESSION['username'])): ?>
+      <li>
+        <a href="/">Exams</a>
+      </li>
+    <?php endif ?>
   </ul>
   <ul>
     <?php if (isset($_SESSION['username'])): ?>

@@ -31,6 +31,11 @@ ul {
   text-decoration: underline;
 }
 
+.green {
+  color: #558B2F;
+  margin-bottom: 10px;
+}
+
 /* Container styles */
 .container {
   width: 100%;
@@ -65,11 +70,6 @@ ul {
 }
 
 #navbar ul li a:hover {
-  color: #558B2F;
-}
-
-/* Color text green */
-.green {
   color: #558B2F;
 }
 
@@ -141,15 +141,34 @@ ul {
   margin: 5px 0;
 }
 
-/* Tests list styles */
-.tests-list {
-  margin-top: 10px;
+/* Exams list styles */
+.exams-list {
+  margin-bottom: 20px;
 }
 
-.tests-list li {
+.exams-list li {
   padding-left: 30px;
   font-size: 1.1rem;
-  line-height: 2.5;
+  line-height: 1.5;
+}
+
+/* 'Add exam' form styles */
+.add-exam-form {
+  display: flex;
+  align-items: flex-start;
+}
+
+.add-exam-form * {
+  height: 30px;
+  margin: 0 5px 0 0;
+  border-radius: 2px;
+  background-color: #ffffff;
+  color: #333333;
+  padding: 5px;
+}
+
+#date {
+  border: 1px solid rgb(169, 169, 169);;
 }
 
 /* Button styles */
@@ -162,10 +181,9 @@ ul {
   color: #ffffff;
 }
 
-/* 'Add test' buttons styles */
+/* 'Add exam' button styles */
 .add-btn {
   background-color: #2E7D32;
-  margin-top: 20px;
 }
 
 .add-btn:hover {

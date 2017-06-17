@@ -1,5 +1,6 @@
 <?php require_once('../config/config.php') ?>
 <?php require_once(SRC_DIR . '/routing/router.php') ?>
+<?php require_once(SRC_DIR . '/database/database.php') ?>
 
 <?php
   session_start();
