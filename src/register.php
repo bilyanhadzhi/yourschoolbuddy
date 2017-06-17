@@ -2,6 +2,11 @@
 <?php require_once(SRC_DIR . '/database/database.php') ?>
 
 <?php
+  if (isset($_SESSION['username'])) {
+    $router = new Router;
+    $router->redirect_to('/');
+  }
+
   $values = ['username' => '', 'email' => '', 'password' => ''];
 
   if (isset($_POST['submit'])) {
@@ -16,7 +21,7 @@
       if (!$db->create_user($values['username'], $values['email'], $values['password'])) {
         $flash[] = 'A user with the same username and/or email address already exists';
       } else {
-        echo 'User successfully registered!';
+        $flash[] = 'You registered successfully!';
       }
     }
   }

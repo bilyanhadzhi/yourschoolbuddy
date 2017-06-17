@@ -2,8 +2,11 @@
 <?php require_once(SRC_DIR . '/routing/router.php') ?>
 
 <?php
-  $url = isset($_GET['url']) ? $_GET['url'] : '';
-  $router = new Router($url);
+  session_start();
 
-  $router->get_from_url();
+  $url = isset($_GET['url']) ? $_GET['url'] : '';
+  $router = new Router;
+
+  $router->set_current_url($url);
+  $router->get_from_current_url();
 ?>

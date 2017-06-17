@@ -43,6 +43,16 @@
       return $user;
     }
 
+    public function get_user_verified($username, $password) {
+      $user = $this->get_user($username);
+
+      if (!$user || !password_verify($password, $user->password)) {
+        return false;
+      }
+
+      return $user;
+    }
+
     public function user_exists($username, $email) {
       $sql = 'SELECT * FROM users WHERE username=:username OR email=:email LIMIT 1';
       $query = $this->handler->prepare($sql);
