@@ -54,6 +54,10 @@ input[type="submit"] {
   font-size: 1.1rem;
 }
 
+.inline-submit:focus {
+  outline: none;
+}
+
 /* Container styles */
 .container {
   width: 100%;

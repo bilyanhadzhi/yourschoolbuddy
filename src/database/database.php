@@ -128,7 +128,11 @@
     }
 
     public function delete_exam($exam_id) {
+      $sql = 'DELETE FROM exams
+              WHERE id=:exam_id';
 
+      $query = $this->handler->prepare($sql);
+      $query->execute(['exam_id' => $exam_id]);
     }
   }
 ?>

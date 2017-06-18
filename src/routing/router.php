@@ -11,19 +11,22 @@
     public function get_from_current_url() {
       switch($this->url_params[0]) {
         case '':
-          $this->url_params_len > 1 ? $this->page_not_found() : $this->get('/home.php', true);
+          $this->not_one_param() ? $this->page_not_found() : $this->get('/home.php', true);
           break;
         case 'log_in':
-          $this->url_params_len > 1 ? $this->page_not_found() : $this->get('/log_in.php', false);
+          $this->not_one_param() ? $this->page_not_found() : $this->get('/log_in.php', false);
           break;
         case 'log_out':
-          $this->url_params_len > 1 ? $this->page_not_found() : $this->get('/log_out.php', true);
+          $this->not_one_param() ? $this->page_not_found() : $this->get('/log_out.php', true);
           break;
         case 'register':
-          $this->url_params_len > 1 ? $this->page_not_found() : $this->get('/register.php', false);
+          $this->not_one_param() ? $this->page_not_found() : $this->get('/register.php', false);
           break;
         case 'add_exam':
-          $this->url_params_len > 1 ? $this->page_not_found() : $this->get('/add_exam.php', true);
+          $this->not_one_param() ? $this->page_not_found() : $this->get('/add_exam.php', true);
+          break;
+        case 'delete_exam':
+          $this->not_one_param() ? $this->page_not_found() : $this->get('/delete_exam.php', true);
           break;
         default:
           $this->page_not_found();
@@ -64,12 +67,12 @@
       exit;
     }
 
-    public function get_url_params() {
-      return $this->url_params;
+    private function not_one_param() {
+      return $this->url_params_len > 1;
     }
 
-    public function get_url_params_length() {
-      return $this->url_params_len;
+    public function get_url_params() {
+      return $this->url_params;
     }
   }
 ?>

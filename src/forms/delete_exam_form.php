@@ -2,18 +2,20 @@
 
 <?php
   class DeleteExamForm extends Form {
+    private $exam_id;
     private $student_id;
-    private $exam;
+    private $current_user_id;
 
-    public function __construct($student_id, $exam) {
+    public function __construct($exam_id, $student_id, $current_user_id) {
+      $this->exam_id = $exam_id;
       $this->student_id = $student_id;
-      $this->exam = $exam;
+      $this->current_user_id = $current_user_id;
 
       $this->validate();
     }
 
     public function validate() {
-      if ($this->student_id !== $this->exam->student_id) {
+      if ($this->student_id !== $this->current_user_id) {
         $this->errors[] = 'The test deleted must be one of your own';
       }
 
