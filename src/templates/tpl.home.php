@@ -6,12 +6,13 @@
     <ul class="exams-list">
       <?php foreach ($exams as $exam): ?>
         <li>
-          <?=$exam['subject_name']?>: <?=date('l, jS F', strtotime($exam['exam_date']))?>
+          <span><?=$exam['subject_name']?>: <?=date('l, jS F', strtotime($exam['exam_date']))?></span>
           <section class="exam-management">
-            <a class="edit-btn hover-underline">Edit</a>
+            <a class="edit-btn">Edit</a>
             <form action="/delete_exam" class="inline-form" method="post">
               <input name="exam_id" type="hidden" value="<?=$exam['exam_id']?>">
-              <input class="inline-submit hover-underline delete-btn" type="submit" value="Delete">
+              <input class="inline-submit delete-btn" type="submit" value="Delete"
+                     onclick="return confirm('Are you sure?')">
             </form>
           </section>
         </li>

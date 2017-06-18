@@ -24,5 +24,5 @@
   $db = new Database;
   $db->delete_exam($_POST['exam_id']);
 
-  $router->redirect_to_with_data('/', ['message' => 'Successfully deleted exam']);
+  $router->redirect_to_with_data('/', ['message' => 'Exam was deleted successfully']);
 ?>

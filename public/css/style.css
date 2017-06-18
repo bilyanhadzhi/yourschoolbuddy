@@ -216,18 +216,20 @@ input[type="submit"] {
 
 .edit-btn {
   color: #1565C0;
+  transition: 0.2s;
 }
 
 .edit-btn:hover {
-  color: #1976D2;
+  color: #1E88E5;
 }
 
 .delete-btn {
   color: #c62828;
+  transition: 0.2s;
 }
 
 .delete-btn:hover {
-  color: #d32f2f;
+  color: #e53935;
 }
 
 .btn:focus {
