@@ -107,17 +107,28 @@
     }
 
     public function get_exams_by_student_id($student_id) {
-      $sql = 'SELECT * FROM exams
-              WHERE student_id=:student_id';
+      $sql = 'SELECT subjects.name AS subject_name,
+                     exams.date AS exam_date,
+                     exams.id AS exam_id
+              FROM exams, users, subjects
+              WHERE users.id = exams.student_id
+              AND users.id = :student_id
+              AND subjects.id = exams.subject_id
+              ORDER BY exams.date ASC';
+
       $query = $this->handler->prepare($sql);
       $query->execute([
         ':student_id' => $student_id,
       ]);
 
-      $query->setFetchMode(PDO::FETCH_CLASS, 'Exam');
+      $query->setFetchMode(PDO::FETCH_ASSOC);
 
       $exams = $query->fetchAll();
       return $exams;
+    }
+
+    public function delete_exam($exam_id) {
+
     }
   }
 ?>

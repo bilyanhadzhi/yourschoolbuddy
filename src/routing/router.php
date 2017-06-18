@@ -34,16 +34,24 @@
       header('Location: ' . ROOT_URL . $url);
     }
 
+    public function redirect_to_with_data($url, $data) {
+      $_SESSION['data'] = $data;
+
+      $this->redirect_to($url);
+    }
+
     public function get($page_name, $protected) {
       $is_logged_in = isset($_SESSION['username']);
 
       if (($page_name === '/log_in.php' || $page_name === '/register.php') && $is_logged_in) {
         $this->redirect_to('/');
+        exit;
       } elseif (!$protected) {
         require_once(SRC_DIR . $page_name);
         exit;
       } elseif (!$is_logged_in) {
         $this->redirect_to('/log_in');
+        exit;
       } else {
         require_once(SRC_DIR . $page_name);
         exit;

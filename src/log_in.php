@@ -4,26 +4,27 @@
 <?php
   $values = ['username' => '', 'password' => ''];
   $title = 'Log in';
+  $is_post = $_SERVER['REQUEST_METHOD'] === 'POST';
 
-  if (isset($_POST['submit'])) {
+  if ($is_post) {
     $login_form = new LoginForm($_POST['username'], $_POST['password']);
     $values = $login_form->get_values();
 
     if (!$login_form->is_valid()) {
       $flash = $login_form->get_errors();
+      exit;
+    }
+
+    $db = new Database;
+    $user = $db->get_user_verified($values['username'], $values['password']);
+
+    if (!$user) {
+      $flash[] = 'Username/password do not match any user';
     } else {
-      $db = new Database;
+      $_SESSION['username'] = $user->username;
 
-      $user = $db->get_user_verified($values['username'], $values['password']);
-
-      if (!$user) {
-        $flash[] = 'Username/password do not match any user';
-      } else {
-        $_SESSION['username'] = $user->username;
-
-        $router = new Router;
-        $router->redirect_to('/');
-      }
+      $router = new Router;
+      $router->redirect_to('/');
     }
   }
 ?>

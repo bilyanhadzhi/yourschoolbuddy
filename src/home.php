@@ -1,5 +1,11 @@
 <?php
   $title = 'Exams';
+  $flash = isset($_SESSION['data']) ? $_SESSION['data'] : null;
+  $today = date("Y-m-d");
+
+  if ($flash) {
+    unset($_SESSION['data']);
+  }
 
   $db = new Database;
   $user = $db->get_current_user();
