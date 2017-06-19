@@ -48,19 +48,18 @@ input[type="submit"] {
   display: inline;
 }
 
-.inline-submit {
+.inline-form-button {
   border: none;
   background-color: transparent;
-  font-size: 1.1rem;
 }
 
-.inline-submit:focus {
+.inline-form-button:focus {
   outline: none;
 }
 
 /* Container styles */
 .container {
-  width: 100%;
+  min-width: 310px;
   max-width: 100vw;
   padding: 20px 5%;
 }
@@ -165,13 +164,22 @@ input[type="submit"] {
 
 /* Exams list styles */
 .exam-management {
-  padding-left: 20px;
+  padding: 5px 0 0 20px;
 }
 
 .exams-list li {
-  padding: 0 0 5px 30px;
-  font-size: 1.1rem;
-  line-height: 1.5;
+  padding: 0 0 20px 30px;
+  font-size: 1.2rem;
+  /*line-height: 1.5;*/
+}
+
+.exams-list li:last-child {
+  padding-bottom: 0;
+}
+
+.subject-name {
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
 /* 'Add exam' form styles */
@@ -214,9 +222,14 @@ input[type="submit"] {
   background-color: #388E3C;
 }
 
+.save-btn {
+  background-color: #1565C0;
+}
+
 .edit-btn {
   color: #1565C0;
   transition: 0.2s;
+  font-size: 1.1rem;
 }
 
 .edit-btn:hover {
@@ -226,6 +239,7 @@ input[type="submit"] {
 .delete-btn {
   color: #c62828;
   transition: 0.2s;
+  font-size: 1.1rem;
 }
 
 .delete-btn:hover {

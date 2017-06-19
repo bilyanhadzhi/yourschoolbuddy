@@ -1,6 +1,8 @@
 <?php require_once(SRC_DIR . '/models/user.php') ?>
 <?php require_once(SRC_DIR . '/models/subject.php') ?>
 <?php require_once(SRC_DIR . '/models/exam.php') ?>
+<?php require_once(SRC_DIR . '/models/user_exam.php') ?>
+<?php require_once(SRC_DIR . '/models/exam_type.php') ?>
 
 <?php
   class Database {
@@ -93,27 +95,83 @@
       return $subjects;
     }
 
-    public function add_exam($subject_id, $student_id, $type, $date, $grade) {
-      $sql = 'INSERT INTO exams (subject_id, student_id, type, date, grade)
-              VALUES (:subject_id, :student_id, :type, :date, :grade)';
+    public function add_exam($subject_id, $student_id, $type_id, $date, $grade) {
+      $sql = 'INSERT INTO exams (subject_id, student_id, type_id, date, grade)
+              VALUES (:subject_id, :student_id, :type_id, :date, :grade)';
       $query = $this->handler->prepare($sql);
       $query->execute([
         ':subject_id' => $subject_id,
         ':student_id' => $student_id,
-        ':type' => $type,
+        ':type_id' => $type_id,
         ':date' => $date,
         ':grade' => 'NULL',
       ]);
     }
 
+    public function edit_exam($id, $subject_id, $type_id, $date, $grade) {
+      $sql = 'UPDATE exams
+              SET subject_id = :subject_id,
+                  type_id = :type_id,
+                  date = :date,
+                  grade = :grade
+              WHERE id = :id';
+
+      $query = $this->handler->prepare($sql);
+      $query->execute([
+        ':id' => $id,
+        ':subject_id' => $subject_id,
+        ':type_id' => $type_id,
+        ':date' => $date,
+        ':grade' => $grade,
+      ]);
+    }
+
+    public function get_exam_types() {
+      $sql = 'SELECT * FROM exam_types';
+      $query = $this->handler->prepare($sql);
+      $query->execute();
+
+      $query->setFetchMode(PDO::FETCH_CLASS, 'ExamType');
+
+      $exam_types = $query->fetchAll();
+      return $exam_types;
+    }
+
+    public function get_exam_by_id($exam_id) {
+      $sql = 'SELECT subjects.name AS subject_name,
+                     exams.date AS exam_date,
+                     exams.id AS exam_id,
+                     exams.student_id AS student_id,
+                     exam_types.name AS exam_type
+              FROM exams, users, subjects, exam_types
+              WHERE users.id = exams.student_id
+              AND exams.id = :exam_id
+              AND subjects.id = exams.subject_id
+              AND exam_types.id = exams.type_id
+              LIMIT 1';
+
+      $query = $this->handler->prepare($sql);
+      $query->execute([
+        ':exam_id' => $exam_id,
+      ]);
+
+      $query->setFetchMode(PDO::FETCH_CLASS, 'UserExam');
+
+      $exam = $query->fetch();
+      return $exam;
+    }
+
     public function get_exams_by_student_id($student_id) {
       $sql = 'SELECT subjects.name AS subject_name,
                      exams.date AS exam_date,
-                     exams.id AS exam_id
-              FROM exams, users, subjects
+                     exams.id AS exam_id,
+                     exam_types.name AS exam_type,
+                     exams.student_id AS student_id
+              FROM exams, users, subjects, exam_types
               WHERE users.id = exams.student_id
               AND users.id = :student_id
               AND subjects.id = exams.subject_id
+              AND exam_types.id = exams.type_id
               ORDER BY exams.date ASC';
 
       $query = $this->handler->prepare($sql);
@@ -121,7 +179,7 @@
         ':student_id' => $student_id,
       ]);
 
-      $query->setFetchMode(PDO::FETCH_ASSOC);
+      $query->setFetchMode(PDO::FETCH_CLASS, 'UserExam');
 
       $exams = $query->fetchAll();
       return $exams;

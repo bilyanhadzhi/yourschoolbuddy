@@ -9,13 +9,10 @@
 
   $db = new Database;
   $user = $db->get_current_user();
-  $subjects = $db->get_subjects();
   $exams = $db->get_exams_by_student_id($user->id);
 
-  $types = [
-    ['value' => 'multiple_choice', 'name' => 'Multiple choice'],
-    ['value' => 'oral', 'name' => 'Oral'],
-  ];
+  $subjects = $db->get_subjects();
+  $exam_types = $db->get_exam_types();
 ?>
 
 <?php require_once('templates/tpl.' . basename(__FILE__)) ?>

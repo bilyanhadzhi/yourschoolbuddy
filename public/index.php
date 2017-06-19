@@ -6,6 +6,7 @@
   session_start();
 
   $url = isset($_GET['url']) ? $_GET['url'] : '';
+
   $router = new Router;
 
   $router->set_current_url($url);

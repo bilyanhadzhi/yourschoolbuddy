@@ -25,6 +25,14 @@
         case 'add_exam':
           $this->not_one_param() ? $this->page_not_found() : $this->get('/add_exam.php', true);
           break;
+        case 'edit_exam':
+          if (count($this->get_url_params()) > 2) {
+            $this->page_not_found();
+            exit;
+          }
+          $params = count($this->get_url_params()) === 2 ? ['exam_id' => $this->url_params[1]] : null;
+          $this->get('/edit_exam.php', true, $params);
+          break;
         case 'delete_exam':
           $this->not_one_param() ? $this->page_not_found() : $this->get('/delete_exam.php', true);
           break;
@@ -37,13 +45,14 @@
       header('Location: ' . ROOT_URL . $url);
     }
 
+    // TODO: Refactor to use a single method w/ default argument
     public function redirect_to_with_data($url, $data) {
       $_SESSION['data'] = $data;
 
       $this->redirect_to($url);
     }
 
-    public function get($page_name, $protected) {
+    public function get($page_name, $protected, $params = NULL) {
       $is_logged_in = isset($_SESSION['username']);
 
       if (($page_name === '/log_in.php' || $page_name === '/register.php') && $is_logged_in) {
@@ -56,6 +65,9 @@
         $this->redirect_to('/log_in');
         exit;
       } else {
+        if (isset($params)) {
+          $params = $params;
+        }
         require_once(SRC_DIR . $page_name);
         exit;
       }
@@ -63,6 +75,7 @@
 
     public function page_not_found() {
       http_response_code(404);
+   // TODO: $this->get('/not_found.php, false');
       echo '404 Error: Page not found';
       exit;
     }
@@ -73,6 +86,10 @@
 
     public function get_url_params() {
       return $this->url_params;
+    }
+
+    public function get_current_url() {
+      return implode('/', $this->get_url_params());
     }
   }
 ?>

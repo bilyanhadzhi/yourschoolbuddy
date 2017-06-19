@@ -2,20 +2,18 @@
 <?php require_once(SRC_DIR . '/forms/add_exam_form.php') ?>
 
 <?php
-  $is_post = $_SERVER['REQUEST_METHOD'] === 'POST';
   $router = new Router;
 
-  if (!$is_post) {
+  if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
     $router->redirect_to('/');
     exit;
   }
 
-  $add_exam_form = new AddExamForm(isset($_POST['subject-id']) ? $_POST['subject-id'] : null,
-                                   $_POST['student-id'],
-                                   isset($_POST['exam-type']) ? $_POST['exam-type'] : null,
-                                   $_POST['exam-date'],
-                                   'NULL');
+  $subject_id = isset($_POST['subject-id']) ? $_POST['subject-id'] : null;
+  $exam_type = isset($_POST['exam-type']) ? $_POST['exam-type'] : null;
 
+  $add_exam_form = new AddExamForm($subject_id, $_POST['student-id'], $exam_type, $_POST['exam-date'],
+                                   'NULL');
 
   if (!$add_exam_form->is_valid()) {
     $router->redirect_to_with_data('/', $add_exam_form->get_errors());
