@@ -16,7 +16,7 @@
                                    'NULL');
 
   if (!$add_exam_form->is_valid()) {
-    $router->redirect_to('/', $add_exam_form->get_errors(), $router->flash_classes['RED']);
+    $router->redirect_to('/', $add_exam_form->get_errors(), $router->get_flash_class('RED'));
     exit;
   }
 
@@ -24,5 +24,5 @@
   $db->add_exam($_POST['subject-id'], $_POST['student-id'], $_POST['exam-type'],
                 $_POST['exam-date'], 'NULL');
 
-  $router->redirect_to('/', ['Exam was added successfully!'], $router->flash_classes['GREEN']);
+  $router->redirect_to('/', ['Exam was added successfully!'], $router->get_flash_class('GREEN'));
 ?>

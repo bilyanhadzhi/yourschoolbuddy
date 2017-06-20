@@ -33,7 +33,7 @@
 
     $db->edit_exam($_POST['exam-id'], $_POST['subject-id'], $_POST['exam-type'], $_POST['exam-date'],
                    'NULL');
-    $router->redirect_to('/', ['Exam was edited successfully!'], $router->flash_classes['BLUE']);
+    $router->redirect_to('/', ['Exam was edited successfully!'], $router->get_flash_class('BLUE'));
     exit;
   }
 
@@ -48,7 +48,7 @@
     $exam_types = $db->get_exam_types();
 
     if ($exam->student_id !== $user->id) {
-      $router->redirect_to('/', ['You can\'t edit other users\' exams.'], $router->flash_classes['RED']);
+      $router->redirect_to('/', ['You can\'t edit other users\' exams.'], $router->get_flash_class('RED'));
       exit;
     }
   }

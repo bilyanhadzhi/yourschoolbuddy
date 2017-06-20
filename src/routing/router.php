@@ -2,7 +2,7 @@
   class Router {
     private $url_params;
     private $url_params_len;
-    public $flash_classes;
+    private $flash_classes;
 
     public function __construct() {
       $this->flash_classes = [
@@ -10,6 +10,10 @@
         'GREEN' => 'flash-green',
         'BLUE' => 'flash-blue',
       ];
+    }
+
+    public function get_flash_class($flash_class) {
+      return $this->flash_classes[$flash_class];
     }
 
     public function set_current_url($url) {

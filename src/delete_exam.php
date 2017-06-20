@@ -17,12 +17,12 @@
   );
 
   if (!$delete_exam_form->is_valid()) {
-    $router->redirect_to('/', $delete_exam_form->get_errors(), $router->flash_classes['RED']);
+    $router->redirect_to('/', $delete_exam_form->get_errors(), $router->get_flash_class('RED'));
     exit;
   }
 
   $db = new Database;
   $db->delete_exam($_POST['exam_id']);
 
-  $router->redirect_to('/', ['Exam was deleted successfully!'], $router->flash_classes['GREEN']);
+  $router->redirect_to('/', ['Exam was deleted successfully!'], $router->get_flash_class('GREEN'));
 ?>
