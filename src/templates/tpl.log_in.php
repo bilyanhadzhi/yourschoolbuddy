@@ -3,11 +3,11 @@
 <section class="auth-container">
   <h2 class="green">Log in</h2>
   <section class="auth-tab">
-    <?php if (isset($flash)): ?>
+    <?php if (isset($messages)): ?>
       <section class="form-flash">
         <ul>
-          <?php foreach ($flash as $flash_message): ?>
-            <li><?=$flash_message?></li>
+          <?php foreach ($messages as $message): ?>
+            <li><?=$message?></li>
           <?php endforeach ?>
         </ul>
       </section>

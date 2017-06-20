@@ -1,10 +1,15 @@
 <?php
   $title = 'Exams';
-  $flash = isset($_SESSION['data']) ? $_SESSION['data'] : null;
+  $messages = isset($_SESSION['messages']) ? $_SESSION['messages'] : null;
+  $messages_class = isset($_SESSION['messages_class']) ? $_SESSION['messages_class'] : null;
   $today = date("Y-m-d");
 
-  if ($flash) {
-    unset($_SESSION['data']);
+  if ($messages) {
+    unset($_SESSION['messages']);
+
+    if ($messages_class) {
+      unset($_SESSION['messages_class']);
+    }
   }
 
   $db = new Database;

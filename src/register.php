@@ -10,14 +10,14 @@
     $values = $register_form->get_values();
 
     if (!$register_form->is_valid()) {
-      $flash = $register_form->get_errors();
+      $messages = $register_form->get_errors();
     } else {
       $db = new Database;
 
       if (!$db->create_user($values['username'], $values['email'], $values['password'])) {
-        $flash[] = 'A user with the same username and/or email address already exists';
+        $messages[] = 'A user with the same username and/or email address already exists';
       } else {
-        $flash[] = 'You registered successfully!';
+        $messages[] = 'You registered successfully!';
       }
     }
   }

@@ -2,6 +2,15 @@
   class Router {
     private $url_params;
     private $url_params_len;
+    public $flash_classes;
+
+    public function __construct() {
+      $this->flash_classes = [
+        'RED' => 'flash-red',
+        'GREEN' => 'flash-green',
+        'BLUE' => 'flash-blue',
+      ];
+    }
 
     public function set_current_url($url) {
       $this->url_params = $url === '' ? [''] : explode('/', rtrim($url, '/'));
@@ -41,15 +50,16 @@
       }
     }
 
-    public function redirect_to($url) {
+    public function redirect_to($url, $messages = null, $messages_class = null) {
+      if (isset($messages)) {
+        $_SESSION['messages'] = $messages;
+
+        if (isset($messages_class)) {
+          $_SESSION['messages_class'] = $messages_class;
+        }
+      }
+
       header('Location: ' . ROOT_URL . $url);
-    }
-
-    // TODO: Refactor to use a single method w/ default argument
-    public function redirect_to_with_data($url, $data) {
-      $_SESSION['data'] = $data;
-
-      $this->redirect_to($url);
     }
 
     public function get($page_name, $protected, $params = NULL) {

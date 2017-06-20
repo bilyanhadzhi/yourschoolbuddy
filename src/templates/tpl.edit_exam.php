@@ -3,8 +3,8 @@
 <div class="container">
   <h2 class="green">Edit exam</h2>
 
-  <?php if ($flash): ?>
-    <?php foreach ($flash as $message): ?>
+  <?php if ($messages): ?>
+    <?php foreach ($messages as $message): ?>
       <?=$message?>
     <?php endforeach ?>
   <?php else: ?>

@@ -4,10 +4,10 @@
 
 <?php
   $title = 'Edit exam';
-  $flash = isset($_SESSION['data']) ? $_SESSION['data'] : null;
+  $messages = isset($_SESSION['messages']) ? $_SESSION['messages'] : null;
 
-  if ($flash) {
-    unset($_SESSION['data']);
+  if ($messages) {
+    unset($_SESSION['messages']);
   }
 
   $db = new Database;
@@ -27,13 +27,13 @@
                                       'NULL');
 
     if (!$edit_exam_form->is_valid()) {
-      $router->redirect_to_with_data('/edit_exam/' . $_POST['exam-id'], $edit_exam_form->get_errors());
+      $router->redirect_to('/edit_exam/' . $_POST['exam-id'], $edit_exam_form->get_errors());
       exit;
     }
 
     $db->edit_exam($_POST['exam-id'], $_POST['subject-id'], $_POST['exam-type'], $_POST['exam-date'],
                    'NULL');
-    $router->redirect_to_with_data('/', ['message' => 'Exam edited successfully!']);
+    $router->redirect_to('/', ['Exam was edited successfully!'], $router->flash_classes['BLUE']);
     exit;
   }
 
@@ -41,14 +41,14 @@
 
   if (!$exam) {
     http_response_code(404);
-    $flash[] = 'Exam does not exist';
+    $messages[] = 'Exam does not exist';
   } else {
     $user = $db->get_current_user();
     $subjects = $db->get_subjects();
     $exam_types = $db->get_exam_types();
 
     if ($exam->student_id !== $user->id) {
-      $router->redirect_to_with_data('/', ['message' => 'You can\'t edit other users\' exams.']);
+      $router->redirect_to('/', ['You can\'t edit other users\' exams.'], $router->flash_classes['RED']);
       exit;
     }
   }

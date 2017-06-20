@@ -1,8 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('Hey');
-  document.querySelectorAll('.subject-name').forEach(function(subjectName) {
-    subjectName.addEventListener('click', function() {
-      console.log(this.textContent);
+  var flashContainer = document.querySelector('.flash');
+
+  if (flashContainer) {
+    var flashCloseBtn = document.getElementById('close-flash-btn');
+
+    flashCloseBtn.addEventListener('click', function() {
+      flashContainer.style.display = 'none';
     });
-  });
+  }
 });

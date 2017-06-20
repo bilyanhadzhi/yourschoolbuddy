@@ -95,6 +95,47 @@ input[type="submit"] {
   color: #558B2F;
 }
 
+/* Flash message styles */
+.flash {
+  position: relative;
+  width: 100%;
+  min-height: 80px;
+  border-radius: 3px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  color: #333333;
+}
+
+#close-flash-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background-color: transparent;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+#close-flash-btn:active, #close-flash-btn:focus {
+  outline: none;
+}
+
+.flash-red {
+  background-color: #FFCCCC;
+}
+
+.flash-green {
+  background-color: #CCFFCC;
+}
+
+.flash-blue {
+  background-color: #CCCCFF;
+}
+
 /* Login modal styles */
 .auth-container {
   background-color: #ffffff;
@@ -170,7 +211,6 @@ input[type="submit"] {
 .exams-list li {
   padding: 0 0 20px 30px;
   font-size: 1.2rem;
-  /*line-height: 1.5;*/
 }
 
 .exams-list li:last-child {

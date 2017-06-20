@@ -11,20 +11,19 @@
     $values = $login_form->get_values();
 
     if (!$login_form->is_valid()) {
-      $flash = $login_form->get_errors();
-      exit;
-    }
-
-    $db = new Database;
-    $user = $db->get_user_verified($values['username'], $values['password']);
-
-    if (!$user) {
-      $flash[] = 'Username/password do not match any user';
+      $messages = $login_form->get_errors();
     } else {
-      $_SESSION['username'] = $user->username;
+      $db = new Database;
+      $user = $db->get_user_verified($values['username'], $values['password']);
 
-      $router = new Router;
-      $router->redirect_to('/');
+      if (!$user) {
+        $messages[] = 'Username/password do not match any user';
+      } else {
+        $_SESSION['username'] = $user->username;
+
+        $router = new Router;
+        $router->redirect_to('/');
+      }
     }
   }
 ?>
