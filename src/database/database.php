@@ -95,7 +95,7 @@
       return $subjects;
     }
 
-    public function add_exam($subject_id, $student_id, $type_id, $date, $grade) {
+    public function add_exam($subject_id, $student_id, $type_id, $date, $grade = 'NULL') {
       $sql = 'INSERT INTO exams (subject_id, student_id, type_id, date, grade)
               VALUES (:subject_id, :student_id, :type_id, :date, :grade)';
       $query = $this->handler->prepare($sql);
@@ -104,11 +104,11 @@
         ':student_id' => $student_id,
         ':type_id' => $type_id,
         ':date' => $date,
-        ':grade' => 'NULL',
+        ':grade' => $grade,
       ]);
     }
 
-    public function edit_exam($id, $subject_id, $type_id, $date, $grade) {
+    public function edit_exam($id, $subject_id, $type_id, $date, $grade = 'NULL') {
       $sql = 'UPDATE exams
               SET subject_id = :subject_id,
                   type_id = :type_id,
@@ -142,6 +142,7 @@
                      exams.date AS exam_date,
                      exams.id AS exam_id,
                      exams.student_id AS student_id,
+                     exams.grade AS exam_grade,
                      exam_types.name AS exam_type
               FROM exams, users, subjects, exam_types
               WHERE users.id = exams.student_id
@@ -161,10 +162,17 @@
       return $exam;
     }
 
-    public function get_exams_by_student_id($student_id) {
+    public function get_grades() {
+      $grades = ['A+', 'A', 'B', 'C', 'D', 'F'];
+
+      return $grades;
+    }
+
+    public function get_exams_for_student($student_id) {
       $sql = 'SELECT subjects.name AS subject_name,
                      exams.date AS exam_date,
                      exams.id AS exam_id,
+                     exams.grade AS exam_grade,
                      exam_types.name AS exam_type,
                      exams.student_id AS student_id
               FROM exams, users, subjects, exam_types

@@ -13,7 +13,7 @@
   $exam_type = isset($_POST['exam-type']) ? $_POST['exam-type'] : null;
 
   $add_exam_form = new AddExamForm($subject_id, $_POST['student-id'], $exam_type, $_POST['exam-date'],
-                                   'NULL');
+                                   $_POST['grade']);
 
   if (!$add_exam_form->is_valid()) {
     $router->redirect_to('/', $add_exam_form->get_errors(), $router->get_flash_class('RED'));
@@ -22,7 +22,7 @@
 
   $db = new Database;
   $db->add_exam($_POST['subject-id'], $_POST['student-id'], $_POST['exam-type'],
-                $_POST['exam-date'], 'NULL');
+                $_POST['exam-date'], $_POST['grade']);
 
   $router->redirect_to('/', ['Exam was added successfully!'], $router->get_flash_class('GREEN'));
 ?>

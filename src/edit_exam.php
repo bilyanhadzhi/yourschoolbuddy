@@ -24,7 +24,7 @@
     $exam_type = isset($_POST['exam-type']) ? $_POST['exam-type'] : null;
 
     $edit_exam_form = new AddExamForm($subject_id, $_POST['student-id'], $exam_type, $_POST['exam-date'],
-                                      'NULL');
+                                      $_POST['grade']);
 
     if (!$edit_exam_form->is_valid()) {
       $router->redirect_to('/edit_exam/' . $_POST['exam-id'], $edit_exam_form->get_errors());
@@ -32,7 +32,7 @@
     }
 
     $db->edit_exam($_POST['exam-id'], $_POST['subject-id'], $_POST['exam-type'], $_POST['exam-date'],
-                   'NULL');
+                   $_POST['grade']);
     $router->redirect_to('/', ['Exam was edited successfully!'], $router->get_flash_class('BLUE'));
     exit;
   }
@@ -46,6 +46,7 @@
     $user = $db->get_current_user();
     $subjects = $db->get_subjects();
     $exam_types = $db->get_exam_types();
+    $grades = $db->get_grades();
 
     if ($exam->student_id !== $user->id) {
       $router->redirect_to('/', ['You can\'t edit other users\' exams.'], $router->get_flash_class('RED'));

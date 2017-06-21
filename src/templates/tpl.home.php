@@ -3,13 +3,13 @@
 <div class="container">
   <?php if ($messages): ?>
     <section class="flash <?=$messages_class?>">
-      <button id="close-flash-btn">✖</button>
+      <button id="close-flash-btn" class="close-section-btn">&#10005;</button>
       <ul>
         <?php foreach ($messages as $message): ?>
           <li><?=$message?></li>
         <?php endforeach ?>
       </ul>
-    </section>
+    </section><h
   <?php endif ?>
   <section class="section-container">
     <h2 class="green">Upcoming exams</h2>
@@ -54,10 +54,24 @@
         <?php endforeach ?>
       </select>
       <input type="date" name="exam-date" id="exam-date" required value="<?=$today?>">
+      <select name="grade">
+        <option value="NULL" selected disabled>Grade</option>
+        <option value="NULL">No grade yet</option>
+        <?php foreach($grades as $grade): ?>
+          <option value="<?=$grade?>"><?=$grade?></option>
+        <?php endforeach ?>
+      </select>
       <input type="hidden" name="student-id" value="<?=$user->id?>" required>
       <input type="submit" class="btn add-btn" value="Add exam">
     </form>
   </section>
+</div>
+
+<div id="timer" class="hide">
+  <header>
+    <h4>Timer</h4>
+    <button id="close-timer-btn" class="close-section-btn">&#10005;</button>
+  </header>
 </div>
 
 <?php require_once('includes/footer.php') ?>

@@ -26,6 +26,15 @@
         <?php endforeach ?>
       </select>
       <input type="date" name="exam-date" id="exam-date" required value="<?=$exam->exam_date?>">
+      <select name="grade">
+        <option disabled selected>Grade</option>
+        <option value="NULL" <?=$exam->exam_grade ? '' : 'selected'?>>No grade yet</option>
+        <?php foreach($grades as $grade): ?>
+          <option value="<?=$grade?>" <?=$exam->exam_grade === $grade ? 'selected' : ''?>>
+            <?=$grade?>
+          </option>
+        <?php endforeach ?>
+      </select>
       <input type="hidden" name="student-id" value="<?=$user->id?>" required>
       <input type="hidden" name="exam-id" value="<?=$exam->exam_id?>">
       <input type="submit" class="btn save-btn" value="Save exam">

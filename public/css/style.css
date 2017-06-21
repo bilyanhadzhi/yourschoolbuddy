@@ -84,16 +84,27 @@ input[type="submit"] {
   height: 100%;
 }
 
-#navbar ul li a {
+.left li {
+  padding-right: 20px;
+}
+
+.right li {
+  padding-left: 20px;
+}
+
+#navbar ul li {
   height: 100%;
   display: flex;
   align-items: center;
   color: #212121;
+  cursor: pointer;
 }
 
-#navbar ul li a:hover {
+#navbar ul *:hover {
   color: #558B2F;
 }
+
+
 
 /* Flash message styles */
 .flash {
@@ -109,18 +120,18 @@ input[type="submit"] {
   color: #333333;
 }
 
-#close-flash-btn {
+.close-section-btn {
   position: absolute;
   top: 10px;
   right: 10px;
   border: none;
   background-color: transparent;
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
 }
 
-#close-flash-btn:active, #close-flash-btn:focus {
+.close-section-btn:active, .close-section-btn:focus {
   outline: none;
 }
 
@@ -253,6 +264,14 @@ input[type="submit"] {
   color: #ffffff;
 }
 
+/* 'Study' button styles */
+#study-btn {
+  background-color: transparent;
+  color: inherit;
+  font-size: 1rem;
+  padding: 0;
+}
+
 /* 'Add exam' button styles */
 .add-btn {
   background-color: #2E7D32;
@@ -290,11 +309,55 @@ input[type="submit"] {
   outline: none;
 }
 
+/* Timer styles */
+#timer {
+  display: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 100vw;
+  height: 100%;
+  background-color: #ffffff;
+  z-index: 1;
+  transition: 0.3s ease-in-out;
+}
+
+.hide {
+  transform: scale(0);
+  opacity: 0;
+}
+
+#timer header {
+  height: 48px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #f5f5f5;
+  padding: 20px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#timer header .close-section-btn {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  width: auto;
+  height: auto;
+}
+
 /* Media queries */
 @media screen and (min-width: 800px) {
   .container {
     padding: 20px 20%;
   }
+}
+
+@media screen and (min-width: 1000px) {
   .add-exam-form {
     align-items: flex-start;
     flex-direction: row;

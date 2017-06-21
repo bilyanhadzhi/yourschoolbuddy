@@ -5,6 +5,7 @@
     public $exam_date;
     public $exam_id;
     public $exam_type;
+    public $exam_grade;
 
     public function get_exam_date() {
       return date('l, jS F', strtotime($this->exam_date));

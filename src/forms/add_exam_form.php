@@ -19,11 +19,18 @@
     }
 
     public function validate() {
+      $grades = ['NULL', 'A+', 'A', 'B', 'C', 'D', 'F'];
+
       if ($this->subject_id === null) {
-        $this->errors[] = 'You did not choose a subject';
+        $this->errors[] = 'You did not select a subject.';
       }
       if ($this->exam_type === null) {
-        $this->errors[] = 'You did not choose an exam type';
+        $this->errors[] = 'You did not select an exam type.';
+      }
+      if (isset($this->exam_grade)) {
+        if (!in_array($this->exam_grade, $grades)) {
+          $this->errors[] = 'You selected an invalid grade.';
+        }
       }
 
       $this->set_valid_status($this->errors ? false : true);

@@ -14,7 +14,8 @@
 
   $db = new Database;
   $user = $db->get_current_user();
-  $exams = $db->get_exams_by_student_id($user->id);
+  $exams = $db->get_exams_for_student($user->id);
+  $grades = $db->get_grades();
 
   $subjects = $db->get_subjects();
   $exam_types = $db->get_exam_types();
