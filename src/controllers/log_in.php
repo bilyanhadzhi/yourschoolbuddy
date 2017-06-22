@@ -28,4 +28,4 @@
   }
 ?>
 
-<?php require_once('templates/tpl.' . basename(__FILE__)) ?>
+<?php require_once(SRC_DIR . '/views/' . basename(__FILE__)) ?>

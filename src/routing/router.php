@@ -73,7 +73,7 @@
         $this->redirect_to('/');
         exit;
       } elseif (!$protected) {
-        require_once(SRC_DIR . $page_name);
+        require_once(SRC_DIR . '/controllers' . $page_name);
         exit;
       } elseif (!$is_logged_in) {
         $this->redirect_to('/log_in');
@@ -82,7 +82,7 @@
         if (isset($params)) {
           $params = $params;
         }
-        require_once(SRC_DIR . $page_name);
+        require_once(SRC_DIR . '/controllers' . $page_name);
         exit;
       }
     }
