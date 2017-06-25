@@ -13,8 +13,8 @@
       </section>
     <?php endif ?>
     <form action="/log_in" method="post">
-      <input type="text" name="username" placeholder="Username" autofocus required
-             value=<?=$values['username']?>>
+      <input type="text" name="name" placeholder="Username" autofocus required
+             value=<?=$values['name']?>>
       <input type="password" name="password" placeholder="Password" required
              value=<?=$values['password']?>>
       <input type="submit" name="submit" value="Log In" class="submit-btn">

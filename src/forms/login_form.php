@@ -2,11 +2,11 @@
 
 <?php
   class LoginForm extends Form {
-    private $username;
+    private $name;
     private $password;
 
-    public function __construct($username, $password) {
-      $this->username = $username;
+    public function __construct($name, $password) {
+      $this->name = $name;
       $this->password = $password;
 
       $this->sanitize();
@@ -14,10 +14,10 @@
     }
 
     public function validate() {
-      $username_len = strlen($this->username);
+      $name_len = strlen($this->name);
       $password_len = strlen($this->password);
 
-      if ($username_len === 0 || $username_len > 50) {
+      if ($name_len === 0 || $name_len > 50) {
         $this->errors[] = 'Username is not between 1 and 50 characters long';
       }
       if ($password_len === 0 || $password_len > 255) {
@@ -28,12 +28,12 @@
     }
 
     public function sanitize() {
-      $this->username = preg_replace('/\s+/', '', $this->username);
+      $this->name = preg_replace('/\s+/', '', $this->name);
     }
 
     public function get_values() {
       return [
-        'username' => $this->username,
+        'name' => $this->name,
         'password' => $this->password,
       ];
     }

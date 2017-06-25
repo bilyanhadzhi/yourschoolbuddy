@@ -2,12 +2,12 @@
 
 <?php
   class RegisterForm extends Form {
-    private $username;
+    private $name;
     private $email;
     private $password;
 
-    public function __construct($username, $email, $password) {
-      $this->username = $username;
+    public function __construct($name, $email, $password) {
+      $this->name = $name;
       $this->email = $email;
       $this->password = $password;
 
@@ -16,11 +16,11 @@
     }
 
     public function validate() {
-      $username_len = strlen($this->username);
+      $name_len = strlen($this->name);
       $email_len = strlen($this->email);
       $password_len = strlen($this->password);
 
-      if ($username_len === 0 || $username_len > 50) {
+      if ($name_len === 0 || $name_len > 50) {
         $this->errors[] = 'Username is not between 1 and 50 characters long';
       }
       if (!filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL)) {
@@ -37,13 +37,13 @@
     }
 
     public function sanitize() {
-      $this->username = preg_replace('/\s+/', '', $this->username);
+      $this->name = preg_replace('/\s+/', '', $this->name);
       $this->email = preg_replace('/\s+/', '', $this->email);
     }
 
     public function get_values() {
       return [
-        'username' => $this->username,
+        'name' => $this->name,
         'email' => $this->email,
         'password' => $this->password,
       ];
