@@ -10,12 +10,12 @@
     exit;
   }
 
-  $subject_id = isset($_POST['subject-id']) ? $_POST['subject-id'] : null;
-  $type_id = isset($_POST['exam-type-id']) ? $_POST['exam-type-id'] : null;
-  $grade = isset($_POST['grade']) ? $_POST['grade'] : null;
+  $subject_id = $_POST['subject_id'] ?? null;
+  $type_id = $_POST['type_id'] ?? null;
+  $grade = $_POST['grade'] ?? null;
 
-  $add_exam_form = new AddExamForm($subject_id, $_POST['student-id'], $type_id, $_POST['exam-date'],
-                                   $grade);
+  $add_exam_form = new AddExamForm($subject_id, $_POST['student_id'],$type_id,
+                                   $_POST['exam_date'], $grade);
 
   if (!$add_exam_form->is_valid()) {
     $router->redirect_to('/', $add_exam_form->get_errors(), $router->get_flash_class('RED'));
@@ -25,8 +25,7 @@
   $exams_dm = new ExamsDM;
   $exam = new Exam;
 
-  $exam->set_values($subject_id, $_POST['student-id'], $type_id, $_POST['exam-date'],
-                    $grade);
+  $exam->construct($subject_id, $_POST['student_id'], $type_id, $_POST['exam_date'], $grade);
 
   $exams_dm->add($exam);
 

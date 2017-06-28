@@ -9,25 +9,25 @@
     <?php endforeach ?>
   <?php else: ?>
     <form class="add-exam-form" method="post" action="/edit_exam">
-      <select name="subject-id" required>
-        <option selected disabled>Subject</option>
+      <select name="subject_id" required>
+        <option value="" selected disabled>Subject</option>
         <?php foreach ($subjects as $subject): ?>
           <option value="<?=$subject->id?>" <?=$exam->subject_name === $subject->name ? 'selected' : ''?>>
             <?=$subject->name?>
           </option>
         <?php endforeach ?>
       </select>
-      <select name="exam-type-id" required>
-        <option selected disabled>Type</option>
+      <select name="type_id" required>
+        <option value="" selected disabled>Type</option>
         <?php foreach ($exam_types as $exam_type): ?>
           <option value="<?=$exam_type->id?>" <?=$exam->type_name === $exam_type->name ? 'selected' : ''?>>
           <?=$exam_type->name?>
         </option>
         <?php endforeach ?>
       </select>
-      <input type="date" name="exam-date" id="exam-date" required value="<?=$exam->date?>">
+      <input type="date" name="exam_date" id="exam-date" required value="<?=$exam->date?>">
       <select name="grade">
-        <option disabled selected value="">Grade</option>
+        <option disabled selected>Grade</option>
         <option value="" <?=$exam->grade ? '' : 'selected'?>>No grade yet</option>
         <?php foreach($grades as $grade): ?>
           <option value="<?=$grade?>" <?=$exam->grade === $grade ? 'selected' : ''?>>
@@ -35,8 +35,8 @@
           </option>
         <?php endforeach ?>
       </select>
-      <input type="hidden" name="student-id" value="<?=$_SESSION['user_id']?>" required>
-      <input type="hidden" name="exam-id" value="<?=$exam->id?>">
+      <input type="hidden" name="student_id" value="<?=$_SESSION['student_id']?>" required>
+      <input type="hidden" name="exam_id" value="<?=$exam->id?>">
       <input type="submit" class="btn save-btn" value="Save exam">
     </form>
   <?php endif ?>

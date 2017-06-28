@@ -5,7 +5,7 @@
 <?php
   session_start();
 
-  $url = isset($_GET['url']) ? $_GET['url'] : '';
+  $url = $_GET['url'] ?? '';
 
   $router = new Router;
 

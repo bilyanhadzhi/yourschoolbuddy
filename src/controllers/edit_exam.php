@@ -6,7 +6,7 @@
 
 <?php
   $title = 'Edit exam';
-  $messages = isset($_SESSION['messages']) ? $_SESSION['messages'] : null;
+  $messages = $_SESSION['messages'] ?? null;
 
   if ($messages) {
     unset($_SESSION['messages']);
@@ -15,7 +15,6 @@
   $exams_dm = new ExamsDM;
   $router = new Router;
 
-
   if (!isset($params)) {
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -23,14 +22,12 @@
       exit;
     }
 
-    $exam = $exams_dm->get_by_id($_POST['exam-id'], false);
+    $exam = $exams_dm->get_by_id($_POST['exam_id'], false);
 
-    print_r($exam);
-
-    $exam->set_subject_id($_POST['subject-id']);
-    $exam->set_type_id($_POST['exam-type-id']);
-    $exam->set_date($_POST['exam-date']);
-    $exam->set_grade($_POST['grade']);
+    $exam->set_subject_id($_POST['subject_id']);
+    $exam->set_type_id($_POST['type_id']);
+    $exam->set_date($_POST['exam_date']);
+    $exam->set_grade($_POST['grade'] ?? null);
 
     $edit_exam_form = new AddExamForm($exam->subject_id, $exam->student_id, $exam->type_id, $exam->date,
                                       $exam->grade);
@@ -56,7 +53,7 @@
     $exam_types = $exams_dm->get_exam_types();
     $grades = $exams_dm->get_grades();
 
-    if ($exam->student_id !== $_SESSION['user_id']) {
+    if ($exam->student_id !== $_SESSION['student_id']) {
       $router->redirect_to('/', ['You can\'t edit other users\' exams.'], $router->get_flash_class('RED'));
       exit;
     }

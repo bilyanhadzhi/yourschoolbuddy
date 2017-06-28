@@ -18,7 +18,7 @@
       if (!$student) {
         $messages[] = 'Username/password do not match any user';
       } else {
-        $_SESSION['user_id'] = $student->id;
+        $_SESSION['student_id'] = $student->id;
 
         $router = new Router;
         $router->redirect_to('/');

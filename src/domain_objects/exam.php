@@ -11,17 +11,12 @@
       // TODO
     }
 
-    public function prepare_to_add($subject_id, $student_id, $type_id, $date, $grade) {
-      $this->id = null;
+    public function construct($subject_id, $student_id, $type_id, $date, $grade) {
       $this->subject_id = $subject_id;
       $this->student_id = $student_id;
       $this->type_id = $type_id;
       $this->date = $date;
       $this->grade = $grade;
-    }
-
-    public function set_id($id) {
-      $this->id = $id;
     }
 
     public function set_subject_id($subject_id) {
@@ -37,7 +32,7 @@
     }
 
     public function set_grade($grade) {
-      $this->grade = $grade;
+      $this->grade = !empty($grade) ? $grade : null;
     }
   }
 ?>

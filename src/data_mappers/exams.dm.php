@@ -36,15 +36,15 @@
                     grade = :grade
                 WHERE id = :id';
 
-        $this->handler
-            ->prepare($sql)
-            ->execute([
-              ':subject_id' => $exam->subject_id,
-              ':type_id' => $exam->type_id,
-              ':date' => $exam->date,
-              ':grade' => $exam->grade,
-              ':id' => $exam->id,
-            ]);
+        $query = $this->handler->prepare($sql);
+
+        $query->execute([
+          ':subject_id' => $exam->subject_id,
+          ':type_id' => $exam->type_id,
+          ':date' => $exam->date,
+          ':grade' => $exam->grade,
+          ':id' => $exam->id,
+        ]);
       } catch (PDOException $e) {
         echo $e;
       }
@@ -142,6 +142,14 @@
       } catch (PDOException $e) {
         echo $e;
       }
+    }
+
+    public function delete($id) {
+      $sql = 'DELETE FROM exams
+              WHERE id = :exam_id';
+
+      $query = $this->handler->prepare($sql);
+      $query->execute(['exam_id' => $id]);
     }
   }
 ?>

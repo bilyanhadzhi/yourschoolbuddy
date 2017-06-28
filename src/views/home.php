@@ -9,7 +9,7 @@
           <li><?=$message?></li>
         <?php endforeach ?>
       </ul>
-    </section><h
+    </section>
   <?php endif ?>
   <section class="section-container">
     <h2 class="green">Upcoming exams</h2>
@@ -25,7 +25,8 @@
             <section class="exam-management">
               <a class="edit-btn" href="/edit_exam/<?=$exam->id?>">Edit</a>
               <form action="/delete_exam" class="inline-form" method="post">
-                <input name="exam_id" type="hidden" value="<?=$exam->exam_id?>">
+                <input name="exam_id" type="hidden" value="<?=$exam->id?>">
+                <input name="student_id" type="hidden" value="<?=$student->id?>">
                 <input class="inline-form-button delete-btn" type="submit" value="Delete"
                       onclick="return confirm('Are you sure?')">
               </form>
@@ -41,19 +42,19 @@
   <section class="section-container">
     <h2 class="green">Add an exam</h2>
     <form class="add-exam-form" method="post" action="/add_exam">
-      <select name="subject-id" required>
-        <option selected disabled>Subject</option>
+      <select name="subject_id" required>
+        <option value="" selected disabled>Subject</option>
         <?php foreach ($subjects as $subject): ?>
           <option value="<?=$subject->id?>"><?=$subject->name?></option>
         <?php endforeach ?>
       </select>
-      <select name="exam-type-id" required>
-        <option selected disabled>Type</option>
+      <select name="type_id" required>
+        <option value="" selected disabled>Type</option>
         <?php foreach ($exam_types as $exam_type): ?>
           <option value="<?=$exam_type->id?>"><?=$exam_type->name?></option>
         <?php endforeach ?>
       </select>
-      <input type="date" name="exam-date" id="exam-date" required value="<?=$today?>">
+      <input type="date" name="exam_date" id="exam-date" required value="<?=$today?>">
       <select name="grade">
         <option value="" selected disabled>Grade</option>
         <option value="">No grade yet</option>
@@ -61,7 +62,7 @@
           <option value="<?=$grade?>"><?=$grade?></option>
         <?php endforeach ?>
       </select>
-      <input type="hidden" name="student-id" value="<?=$student->id?>" required>
+      <input type="hidden" name="student_id" value="<?=$student->id?>" required>
       <input type="submit" class="btn add-btn" value="Add exam">
     </form>
   </section>

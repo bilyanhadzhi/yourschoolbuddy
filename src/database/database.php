@@ -77,8 +77,8 @@
     }
 
     public function get_current_user() {
-      if (isset($_SESSION['user_id'])) {
-        return $this->get_user($_SESSION['user_id']);
+      if (isset($_SESSION['student_id'])) {
+        return $this->get_user($_SESSION['student_id']);
       } else {
         return null;
       }

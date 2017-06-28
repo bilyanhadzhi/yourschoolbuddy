@@ -67,7 +67,7 @@
     }
 
     public function get($page_name, $protected, $params = NULL) {
-      $is_logged_in = isset($_SESSION['user_id']);
+      $is_logged_in = isset($_SESSION['student_id']);
 
       if (($page_name === '/log_in.php' || $page_name === '/register.php') && $is_logged_in) {
         $this->redirect_to('/');
