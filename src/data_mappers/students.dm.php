@@ -41,6 +41,8 @@
           ':email' => $student->email,
           ':password' => $student->password,
         ]);
+
+        return true;
       } catch (PDOException $e) {
         echo $e;
         return false;

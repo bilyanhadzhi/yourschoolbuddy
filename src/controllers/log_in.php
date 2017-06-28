@@ -25,6 +25,11 @@
       }
     }
   }
+
+  if (!empty($_SESSION['messages'])) {
+    $messages[] = $_SESSION['messages'];
+    unset($_SESSION['messages']);
+  }
 ?>
 
 <?php require_once(SRC_DIR . '/views/' . basename(__FILE__)) ?>
