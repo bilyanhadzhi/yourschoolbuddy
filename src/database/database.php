@@ -1,8 +1,8 @@
-<?php require_once(SRC_DIR . '/models/user.php') ?>
-<?php require_once(SRC_DIR . '/models/subject.php') ?>
-<?php require_once(SRC_DIR . '/models/exam.php') ?>
-<?php require_once(SRC_DIR . '/models/user_exam.php') ?>
-<?php require_once(SRC_DIR . '/models/exam_type.php') ?>
+<?php require_once(SRC_DIR . '/domain_objects/student.php') ?>
+<?php require_once(SRC_DIR . '/domain_objects/subject.php') ?>
+<?php require_once(SRC_DIR . '/domain_objects/exam.php') ?>
+<?php /*require_once(SRC_DIR . '/domain_objects/user_exam.php')*/ ?>
+<?php require_once(SRC_DIR . '/domain_objects/exam_type.php') ?>
 
 <?php
   class Database {
@@ -42,7 +42,7 @@
               WHERE username=:username LIMIT 1';
       $query = $this->handler->prepare($sql);
       $query->execute([':username' => $username]);
-      $query->setFetchMode(PDO::FETCH_CLASS, 'User');
+      $query->setFetchMode(PDO::FETCH_CLASS, 'Student');
 
       $user = $query->fetch();
       return $user;
@@ -77,8 +77,8 @@
     }
 
     public function get_current_user() {
-      if (isset($_SESSION['username'])) {
-        return $this->get_user($_SESSION['username']);
+      if (isset($_SESSION['student_id'])) {
+        return $this->get_user($_SESSION['student_id']);
       } else {
         return null;
       }
@@ -163,7 +163,7 @@
     }
 
     public function get_grades() {
-      $grades = ['A+', 'A', 'B', 'C', 'D', 'F'];
+      $grades = ['A', 'B', 'C', 'D', 'F'];
 
       return $grades;
     }
@@ -176,8 +176,8 @@
                      exam_types.name AS exam_type,
                      exams.student_id AS student_id
               FROM exams, users, subjects, exam_types
-              WHERE users.id = exams.student_id
-              AND users.id = :student_id
+              WHERE users.id = :student_id
+              AND users.id = exams.student_id
               AND subjects.id = exams.subject_id
               AND exam_types.id = exams.type_id
               ORDER BY exams.date ASC';
