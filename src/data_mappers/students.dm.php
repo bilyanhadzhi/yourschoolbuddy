@@ -47,7 +47,7 @@
       }
     }
 
-    public function get_by_id(int $id): Student {
+    public function get_by_id(int $id) {
       try {
         $sql = 'SELECT * FROM students
                 WHERE id = :id
@@ -64,7 +64,7 @@
       }
     }
 
-    public function get_by_name(string $name, string $password = null): Student {
+    public function get_by_name(string $name, string $password = null) {
       try {
         $sql = 'SELECT * FROM students
                 WHERE name = :name';

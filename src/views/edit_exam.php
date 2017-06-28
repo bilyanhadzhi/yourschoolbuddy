@@ -17,26 +17,26 @@
           </option>
         <?php endforeach ?>
       </select>
-      <select name="exam-type" required>
+      <select name="exam-type-id" required>
         <option selected disabled>Type</option>
         <?php foreach ($exam_types as $exam_type): ?>
-          <option value="<?=$exam_type->id?>" <?=$exam->exam_type === $exam_type->name ? 'selected' : ''?>>
+          <option value="<?=$exam_type->id?>" <?=$exam->type_name === $exam_type->name ? 'selected' : ''?>>
           <?=$exam_type->name?>
         </option>
         <?php endforeach ?>
       </select>
-      <input type="date" name="exam-date" id="exam-date" required value="<?=$exam->exam_date?>">
+      <input type="date" name="exam-date" id="exam-date" required value="<?=$exam->date?>">
       <select name="grade">
-        <option disabled selected>Grade</option>
-        <option value="NULL" <?=$exam->exam_grade ? '' : 'selected'?>>No grade yet</option>
+        <option disabled selected value="">Grade</option>
+        <option value="" <?=$exam->grade ? '' : 'selected'?>>No grade yet</option>
         <?php foreach($grades as $grade): ?>
-          <option value="<?=$grade?>" <?=$exam->exam_grade === $grade ? 'selected' : ''?>>
+          <option value="<?=$grade?>" <?=$exam->grade === $grade ? 'selected' : ''?>>
             <?=$grade?>
           </option>
         <?php endforeach ?>
       </select>
-      <input type="hidden" name="student-id" value="<?=$user->id?>" required>
-      <input type="hidden" name="exam-id" value="<?=$exam->exam_id?>">
+      <input type="hidden" name="student-id" value="<?=$_SESSION['user_id']?>" required>
+      <input type="hidden" name="exam-id" value="<?=$exam->id?>">
       <input type="submit" class="btn save-btn" value="Save exam">
     </form>
   <?php endif ?>

@@ -11,10 +11,10 @@
       try {
         $sql = 'SELECT * FROM subjects';
 
-        return $this->handler
-            ->query($sql)
-            ->setFetchMode(PDO_FETCH_CLASS, 'Subject')
-            ->fetchAll();
+        $query = $this->handler->query($sql);
+        $query->setFetchMode(PDO_FETCH_CLASS, 'Subject');
+
+        return $query->fetchAll();
       } catch (PDOException $e) {
         echo $e;
       }

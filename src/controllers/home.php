@@ -18,7 +18,13 @@
   $students_dm = new StudentsDM;
   $exams_dm = new ExamsDM;
 
-  $user = $students_dm->get_by_id($_SESSION['user_id']);
+  $student = $students_dm->get_by_id($_SESSION['user_id']);
+
+  $exams = $exams_dm->get_for_student($_SESSION['user_id']);
+  $grades = $exams_dm->get_grades();
+  $subjects = $exams_dm->get_subjects();
+  $exam_types = $exams_dm->get_exam_types();
+
   // $user = $db->get_current_user();
   // $exams = $db->get_exams_for_student($user->id);
   // $grades = $db->get_grades();

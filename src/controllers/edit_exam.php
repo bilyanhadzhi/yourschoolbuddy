@@ -1,6 +1,8 @@
-<?php require_once(SRC_DIR . '/database/database.php') ?>
 <?php require_once(SRC_DIR . '/routing/router.php') ?>
 <?php require_once(SRC_DIR . '/forms/add_exam_form.php') ?>
+<?php require_once(SRC_DIR . '/data_mappers/exams.dm.php') ?>
+<?php require_once(SRC_DIR . '/domain_objects/exam.php') ?>
+<?php require_once(SRC_DIR . '/domain_objects/subject.php') ?>
 
 <?php
   $title = 'Edit exam';
@@ -10,8 +12,9 @@
     unset($_SESSION['messages']);
   }
 
-  $db = new Database;
+  $exams_dm = new ExamsDM;
   $router = new Router;
+
 
   if (!isset($params)) {
 
@@ -20,35 +23,40 @@
       exit;
     }
 
-    $subject_id = isset($_POST['subject-id']) ? $_POST['subject-id'] : null;
-    $exam_type = isset($_POST['exam-type']) ? $_POST['exam-type'] : null;
+    $exam = $exams_dm->get_by_id($_POST['exam-id'], false);
 
-    $edit_exam_form = new AddExamForm($subject_id, $_POST['student-id'], $exam_type, $_POST['exam-date'],
-                                      $_POST['grade']);
+    print_r($exam);
+
+    $exam->set_subject_id($_POST['subject-id']);
+    $exam->set_type_id($_POST['exam-type-id']);
+    $exam->set_date($_POST['exam-date']);
+    $exam->set_grade($_POST['grade']);
+
+    $edit_exam_form = new AddExamForm($exam->subject_id, $exam->student_id, $exam->type_id, $exam->date,
+                                      $exam->grade);
 
     if (!$edit_exam_form->is_valid()) {
-      $router->redirect_to('/edit_exam/' . $_POST['exam-id'], $edit_exam_form->get_errors());
+      $router->redirect_to('/edit_exam/' . $_POST['exam_id'], $edit_exam_form->get_errors());
       exit;
     }
 
-    $db->edit_exam($_POST['exam-id'], $_POST['subject-id'], $_POST['exam-type'], $_POST['exam-date'],
-                   $_POST['grade']);
+    $exams_dm->edit($exam);
+
     $router->redirect_to('/', ['Exam was edited successfully!'], $router->get_flash_class('BLUE'));
     exit;
   }
 
-  $exam = $db->get_exam_by_id($params['exam_id']);
+  $exam = $exams_dm->get_by_id($params['exam_id']);
 
   if (!$exam) {
     http_response_code(404);
     $messages[] = 'Exam does not exist';
   } else {
-    $user = $db->get_current_user();
-    $subjects = $db->get_subjects();
-    $exam_types = $db->get_exam_types();
-    $grades = $db->get_grades();
+    $subjects = $exams_dm->get_subjects();
+    $exam_types = $exams_dm->get_exam_types();
+    $grades = $exams_dm->get_grades();
 
-    if ($exam->student_id !== $user->id) {
+    if ($exam->student_id !== $_SESSION['user_id']) {
       $router->redirect_to('/', ['You can\'t edit other users\' exams.'], $router->get_flash_class('RED'));
       exit;
     }

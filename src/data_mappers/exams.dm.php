@@ -1,6 +1,6 @@
 <?php require_once('data_mapper.php') ?>
 <?php require_once(SRC_DIR . '/domain_objects/exam.php') ?>
-<?php require_once(SRC_DIR . '/domain_objects/exam_type.php') ?>
+<?php require_once(SRC_DIR . '/domain_objects/subject.php') ?>
 
 <?php
   class ExamsDM extends DataMapper {
@@ -10,24 +10,24 @@
 
     public function add(Exam $exam) {
       try {
-        $sql = 'INSERT INTO exams (student_id, subject_id,, type_id, date, grade)
+        $sql = 'INSERT INTO exams (student_id, subject_id, type_id, date, grade)
                 VALUES (:student_id, :subject_id, :type_id, :date, :grade)';
 
-        $this->handler
-            ->prepare($sql)
-            ->execute([
-              ':student_id' => $student_id,
-              ':subject_id' => $subject_id,
-              ':type_id' => $type_id,
-              ':date' => $date,
-              ':grade' => $grade,
-            ]);
+        $query = $this->handler->prepare($sql);
+
+        $query->execute([
+          ':student_id' => $exam->student_id,
+          ':subject_id' => $exam->subject_id,
+          ':type_id' => $exam->type_id,
+          ':date' => $exam->date,
+          ':grade' => $exam->grade,
+        ]);
       } catch (PDOException $e) {
         echo $e;
       }
     }
 
-    public function edit_by_id(int $id, Exam $new_exam) {
+    public function edit(Exam $exam) {
       try {
         $sql = 'UPDATE exams
                 SET subject_id = :subject_id,
@@ -39,11 +39,11 @@
         $this->handler
             ->prepare($sql)
             ->execute([
-              ':subject_id' => $new_exam->subject_id,
-              ':type_id' => $new_exam->type_id,
-              ':date' => $new_exam->date,
-              ':grade' => $new_exam->grade,
-              ':id' => $id,
+              ':subject_id' => $exam->subject_id,
+              ':type_id' => $exam->type_id,
+              ':date' => $exam->date,
+              ':grade' => $exam->grade,
+              ':id' => $exam->id,
             ]);
       } catch (PDOException $e) {
         echo $e;
@@ -54,10 +54,11 @@
       try {
         $sql = 'SELECT * FROM exam_types';
 
-        return $this->handler
-            ->query($sql)
-            ->setFetchMode(PDO::FETCH_CLASS, 'ExamType')
-            ->fetch();
+        $query = $this->handler->prepare($sql);
+        $query->execute();
+
+        $query->setFetchMode(PDO::FETCH_CLASS, 'ExamType');
+        return $query->fetchAll();
       } catch (PDOException $e) {
         echo $e;
       }
@@ -67,51 +68,77 @@
       return ['A', 'B', 'C', 'D', 'E', 'F'];
     }
 
-    public function get_by_id(int $id): Exam {
+    public function get_subjects() {
       try {
-        $sql = 'SELECT subjects.name AS name,
-                       exams.id AS id,
-                       exams.student_id AS student_id,
-                       exams.date AS `date`,
-                       exams.grade AS grade,
-                       exam_types.name AS type
-                FROM exams, students, subjects, exam_types
-                WHERE exams.id = :exam_id
-                AND students.id = exams.student_id
-                AND subjects.id = exams.subject_id
-                AND exam_types.id = exams.type_id
-                LIMIT 1';
+        $sql = 'SELECT * FROM subjects';
 
-        return $this->handler
-            ->prepare($sql)
-            ->execute([':exam_id' => $id])
-            ->setFetchMode(PDO::FETCH_OBJ)
-            ->fetch();
+        $query = $this->handler->prepare($sql);
+        $query->execute();
+        $query->setFetchMode(PDO::FETCH_CLASS, 'Subject');
+
+        return $query->fetchAll();
       } catch (PDOException $e) {
         echo $e;
       }
     }
 
-    public function get_for_student(int $student_id): array {
+    public function get_by_id(int $id, bool $pretty = true) {
+      try {
+        $sql = '';
+
+        if (!$pretty) {
+          $sql = 'SELECT * FROM exams
+                  WHERE id = :exam_id';
+        } else {
+          $sql = 'SELECT subjects.name AS subject_name,
+                        exams.id AS id,
+                        exams.student_id AS student_id,
+                        exams.date AS date,
+                        exams.grade AS grade,
+                        exam_types.name AS type_name
+                  FROM exams, students, subjects, exam_types
+                  WHERE exams.id = :exam_id
+                  AND students.id = exams.student_id
+                  AND subjects.id = exams.subject_id
+                  AND exam_types.id = exams.type_id
+                  LIMIT 1';
+        }
+
+        $query = $this->handler->prepare($sql);
+        $query->execute([':exam_id' => $id]);
+
+        if (!$pretty) {
+          $query->setFetchMode(PDO::FETCH_CLASS, 'Exam');
+        } else {
+          $query->setFetchMode(PDO::FETCH_OBJ);
+        }
+
+        return $query->fetch();
+      } catch (PDOException $e) {
+        echo $e;
+      }
+    }
+
+    public function get_for_student(int $student_id) {
       try {
         $sql = 'SELECT subjects.name AS subject_name,
-                       exams.date AS exam_date,
-                       exams.id AS exam_id,
-                       exams.grade AS exam_grade,
-                       exam_types.name AS exam_type,
+                       exams.date AS date,
+                       exams.id AS id,
+                       exams.grade AS grade,
+                       exam_types.name AS type,
                        exams.student_id AS student_id
-                FROM exams, users, subjects, exam_types
-                WHERE users.id = :student_id
-                AND users.id = exams.student_id
+                FROM exams, students, subjects, exam_types
+                WHERE students.id = :student_id
+                AND students.id = exams.student_id
                 AND subjects.id = exams.subject_id
                 AND exam_types.id = exams.type_id
                 ORDER BY exams.date ASC';
 
-        return $this->handler
-            ->prepare($sql)
-            ->execute([':student_id' => $student_id])
-            ->setFetchMode(PDO::FETCH_OBJ)
-            ->fetch();
+        $query = $this->handler->prepare($sql);
+        $query->execute([':student_id' => $student_id]);
+
+        $query->setFetchMode(PDO::FETCH_OBJ);
+        return $query->fetchAll();
       } catch (PDOException $e) {
         echo $e;
       }
