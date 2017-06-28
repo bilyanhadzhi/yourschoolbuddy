@@ -1,5 +1,5 @@
 <?php
-  $project_root_dir = '/app';
+  $project_root_dir = '/home/bilyan/Coding/projects/yourschoolbuddy';
   $src_dir = $project_root_dir . '/src';
   $public_dir = $project_root_dir . '/public';
 
