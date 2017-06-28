@@ -10,7 +10,7 @@
   $db_username = 'root';
   $db_password = 'root';
 
-  $root_url = 'http://192.168.1.100:81';
+  $root_url = 'https://mysterious-plateau-59715.herokuapp.com';
 
   define('PROJECT_ROOT_DIR', $project_root_dir);
   define('SRC_DIR', $src_dir);
