@@ -1,14 +1,10 @@
-<?php require_once('../config/config.php') ?>
-<?php require_once(SRC_DIR . '/routing/router.php') ?>
-<?php require_once(SRC_DIR . '/database/database.php') ?>
-
 <?php
-  session_start();
+  echo 'Hey<br>';
 
-  $url = $_GET['url'] ?? '';
+  require_once('../config/config.php');
+  echo 'Got config<br>';
 
-  $router = new Router;
+  require_once(SRC_DIR . '/routing/router.php');
+  echo 'Got router<br>';
 
-  $router->set_current_url($url);
-  $router->get_from_current_url();
 ?>
