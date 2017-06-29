@@ -3,13 +3,15 @@
   $src_dir = $project_root_dir . '/src';
   $public_dir = $project_root_dir . '/public';
 
-  $db_host = '127.0.0.1';
-  $db_name = 'yourschoolbuddy';
-  $db_port = getenv('JAWSDB_PORT');
+  $db_url = getenv('JAWSDB_URL');
+  $dbparts = parse_url($db_url);
 
-  $db_driver = 'mysql:host=' . $db_host . ';dbname=' . $db_name . ';port=' . $db_port;
-  $db_username = getenv('JAWSDB_USERNAME');
-  $db_password = getenv('JAWSDB_PASSWORD');
+  $db_host = $dbparts['host'];
+  $db_username = $dbparts['user'];
+  $db_password = $dbparts['pass'];
+  $database = ltrim($dbparts['path'],'/');
+
+  $db_driver = 'mysql:host=' . $db_host . ';dbname=' . $database;
 
   $root_url = 'https://mysterious-plateau-59715.herokuapp.com';
 
