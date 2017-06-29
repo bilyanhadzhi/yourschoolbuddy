@@ -5,10 +5,11 @@
 
   $db_host = 'localhost';
   $db_name = 'yourschoolbuddy';
-  $db_driver = "mysql:host=$db_host;dbname=$db_name" ;
+  $db_port = getenv('JAWSDB_PORT');
 
-  $db_username = 'root';
-  $db_password = 'root';
+  $db_driver = 'mysql:host=' . $db_host . ';dbname=' . $db_name . ';port=' . $db_port;
+  $db_username = getenv('JAWSDB_USERNAME');
+  $db_password = getenv('JAWSDB_PASSWORD');
 
   $root_url = 'https://mysterious-plateau-59715.herokuapp.com';
 
