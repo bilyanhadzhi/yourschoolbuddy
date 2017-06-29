@@ -3,7 +3,7 @@
   $src_dir = $project_root_dir . '/src';
   $public_dir = $project_root_dir . '/public';
 
-  $db_host = 'localhost';
+  $db_host = '127.0.0.1';
   $db_name = 'yourschoolbuddy';
   $db_port = getenv('JAWSDB_PORT');
 
