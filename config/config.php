@@ -1,16 +1,19 @@
 <?php
-  $project_root_dir = '/home/bilyan/Coding/projects/yourschoolbuddy';
+  $project_root_dir = '/app';
   $src_dir = $project_root_dir . '/src';
   $public_dir = $project_root_dir . '/public';
 
-  $db_host = 'localhost';
-  $db_name = 'yourschoolbuddy';
-  $db_driver = "mysql:host=$db_host;dbname=$db_name" ;
+  $db_url = getenv('JAWSDB_URL');
+  $dbparts = parse_url($db_url);
 
-  $db_username = 'root';
-  $db_password = 'root';
+  $db_host = $dbparts['host'];
+  $db_username = $dbparts['user'];
+  $db_password = $dbparts['pass'];
+  $database = ltrim($dbparts['path'], '/');
 
-  $root_url = 'http://192.168.1.100:81';
+  $db_driver = 'mysql:host=' . $db_host . ';dbname=' . $database;
+
+  $root_url = 'https://mysterious-plateau-59715.herokuapp.com';
 
   define('PROJECT_ROOT_DIR', $project_root_dir);
   define('SRC_DIR', $src_dir);
