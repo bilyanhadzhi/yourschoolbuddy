@@ -17,7 +17,7 @@
 
 
   if (!$delete_exam_form->is_valid()) {
-    $router->redirect_to('/', $delete_exam_form->get_errors(), $router->get_flash_class('RED'));
+    $router->redirect_to('/', $delete_exam_form->get_errors(), Router::$FLASH_RED);
     exit;
   }
 
@@ -25,5 +25,5 @@
 
   $exams_dm->delete($_POST['exam_id']);
 
-  $router->redirect_to('/', ['Exam was deleted successfully!'], $router->get_flash_class('GREEN'));
+  $router->redirect_to('/', ['Exam was deleted successfully!'], Router::$FLASH_GREEN);
 ?>

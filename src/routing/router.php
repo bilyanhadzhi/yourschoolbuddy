@@ -4,17 +4,9 @@
     private $url_params_len;
     private $flash_classes;
 
-    public function __construct() {
-      $this->flash_classes = [
-        'RED' => 'flash-red',
-        'GREEN' => 'flash-green',
-        'BLUE' => 'flash-blue',
-      ];
-    }
-
-    public function get_flash_class($flash_class) {
-      return $this->flash_classes[$flash_class];
-    }
+    public static $FLASH_RED = 'flash-red';
+    public static $FLASH_GREEN = 'flash-green';
+    public static $FLASH_BLUE = 'flash-blue';
 
     public function set_current_url($url) {
       $this->url_params = $url === '' ? [''] : explode('/', rtrim($url, '/'));

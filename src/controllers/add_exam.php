@@ -18,7 +18,7 @@
                                    $_POST['exam_date'], $grade);
 
   if (!$add_exam_form->is_valid()) {
-    $router->redirect_to('/', $add_exam_form->get_errors(), $router->get_flash_class('RED'));
+    $router->redirect_to('/', $add_exam_form->get_errors(), Router::$FLASH_RED);
     exit;
   }
 
@@ -29,5 +29,5 @@
 
   $exams_dm->add($exam);
 
-  $router->redirect_to('/', ['Exam was added successfully!'], $router->get_flash_class('GREEN'));
+  $router->redirect_to('/', ['Exam was added successfully!'], Router::$FLASH_GREEN);
 ?>

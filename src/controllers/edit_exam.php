@@ -39,7 +39,7 @@
 
     $exams_dm->edit($exam);
 
-    $router->redirect_to('/', ['Exam was edited successfully!'], $router->get_flash_class('BLUE'));
+    $router->redirect_to('/', ['Exam was edited successfully!'], Router::$FLASH_BLUE);
     exit;
   }
 
@@ -54,7 +54,7 @@
     $grades = $exams_dm->get_grades();
 
     if ($exam->student_id !== $_SESSION['student_id']) {
-      $router->redirect_to('/', ['You can\'t edit other users\' exams.'], $router->get_flash_class('RED'));
+      $router->redirect_to('/', ['You can\'t edit other users\' exams.'], Router::$FLASH_RED);
       exit;
     }
   }
