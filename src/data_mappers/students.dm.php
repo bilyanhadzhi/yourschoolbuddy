@@ -1,7 +1,7 @@
-<?php require_once('data_mapper.php') ?>
-<?php require_once(SRC_DIR . '/domain_objects/student.php') ?>
-
 <?php
+  require_once('data_mapper.php');
+  require_once(SRC_DIR . '/domain_objects/student.php');
+
   class StudentsDM extends DataMapper {
     public function __construct() {
       parent::__construct();

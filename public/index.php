@@ -1,7 +1,7 @@
-<?php require_once('../config/config.php') ?>
-<?php require_once(SRC_DIR . '/routing/router.php') ?>
-
 <?php
+  require_once('../config/config.php');
+  require_once(SRC_DIR . '/routing/router.php');
+
   session_start();
 
   $url = $_GET['url'] ?? '';

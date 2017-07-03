@@ -1,8 +1,6 @@
-<?php require_once(SRC_DIR . '/forms/delete_exam_form.php') ?>
-<?php require_once(SRC_DIR . '/data_mappers/exams.dm.php') ?>
-<?php require_once(SRC_DIR . '/domain_objects/exam.php') ?>
-
 <?php
+  require_once(SRC_DIR . '/data_mappers/exams.dm.php');
+
   $router = new Router;
 
   if (!($_SERVER['REQUEST_METHOD'] === 'POST')) {
@@ -10,20 +8,18 @@
     exit;
   }
 
-  $exam = new Exam;
+  $exams_dm = new ExamsDM;
+  $exam = $exams_dm->get_by_id($_POST['exam_id'], false);
 
-  $delete_exam_form = new DeleteExamForm($_POST['exam_id'], $_POST['student_id'],
-                                         $_SESSION['student_id']);
+  $validation_errors = $exam->validate_delete();
 
-
-  if (!$delete_exam_form->is_valid()) {
-    $router->redirect_to('/', $delete_exam_form->get_errors(), Router::$FLASH_RED);
+  if ($validation_errors) {
+    $router->redirect_to('/', $validation_errors, Router::$FLASH_RED);
     exit;
   }
 
-  $exams_dm = new ExamsDM;
-
-  $exams_dm->delete($_POST['exam_id']);
+  $exams_dm->delete($exam->id);
 
   $router->redirect_to('/', ['Exam was deleted successfully!'], Router::$FLASH_GREEN);
+  exit;
 ?>

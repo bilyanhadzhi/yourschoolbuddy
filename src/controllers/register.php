@@ -1,30 +1,33 @@
-<?php require_once(SRC_DIR . '/routing/router.php') ?>
-<?php require_once(SRC_DIR . '/forms/register_form.php') ?>
-<?php require_once(SRC_DIR . '/data_mappers/students.dm.php') ?>
-<?php require_once(SRC_DIR . '/domain_objects/student.php') ?>
-
 <?php
+  require_once(SRC_DIR . '/routing/router.php');
+  require_once(SRC_DIR . '/data_mappers/students.dm.php');
+  require_once(SRC_DIR . '/domain_objects/student.php');
+
   $title = 'Register';
   $values = ['name' => '', 'email' => '', 'password' => ''];
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $register_form = new RegisterForm($_POST['name'], $_POST['email'], $_POST['password']);
+    $student = new Student;
+    $student->construct($_POST['name'], $_POST['email'], $_POST['password']);
 
-    if (!$register_form->is_valid()) {
-      $messages = $register_form->get_errors();
+    $validation_errors = $student->validate_register();
+
+    if ($validation_errors) {
+      $messages = $validation_errors;
+      $values = ['name' => $_POST['name'], 'email' => $_POST['email'], 'password' => $_POST['password']];
     } else {
       $students_dm = new StudentsDM;
 
-      $new_student = new Student;
-      $new_student->set_values($_POST['name'], $_POST['email'], $_POST['password']);
-
-      if (!$students_dm->create($new_student)) {
-        $values = $register_form->get_values();
+      if ($students_dm->exists($student->name, $student->email)) {
         $messages[] = 'A user with the same username and/or email address already exists';
+        $values = ['name' => $_POST['name'], 'email' => $_POST['email'], 'password' => $_POST['password']];
       } else {
-        $_SESSION['messages'] = 'You registered successfully!';
+        $students_dm->create($student);
+        $messages[] = 'You registered successfully!';
+
         $router = new Router;
         $router->redirect_to('/log_in', $messages);
+        exit;
       }
     }
   }

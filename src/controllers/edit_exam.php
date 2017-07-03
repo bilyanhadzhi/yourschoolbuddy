@@ -1,10 +1,7 @@
-<?php require_once(SRC_DIR . '/routing/router.php') ?>
-<?php require_once(SRC_DIR . '/forms/add_exam_form.php') ?>
-<?php require_once(SRC_DIR . '/data_mappers/exams.dm.php') ?>
-<?php require_once(SRC_DIR . '/domain_objects/exam.php') ?>
-<?php require_once(SRC_DIR . '/domain_objects/subject.php') ?>
-
 <?php
+  require_once(SRC_DIR . '/routing/router.php');
+  require_once(SRC_DIR . '/data_mappers/exams.dm.php');
+
   $title = 'Edit exam';
   $messages = $_SESSION['messages'] ?? null;
 
@@ -29,11 +26,10 @@
     $exam->set_date($_POST['exam_date']);
     $exam->set_grade($_POST['grade'] ?? null);
 
-    $edit_exam_form = new AddExamForm($exam->subject_id, $exam->student_id, $exam->type_id, $exam->date,
-                                      $exam->grade);
+    $validation_errors = $exam->validate_create();
 
-    if (!$edit_exam_form->is_valid()) {
-      $router->redirect_to('/edit_exam/' . $_POST['exam_id'], $edit_exam_form->get_errors());
+    if ($validation_errors) {
+      $router->redirect_to('/edit_exam/' . $_POST['exam_id'], $validation_errors);
       exit;
     }
 

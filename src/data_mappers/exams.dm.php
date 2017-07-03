@@ -1,9 +1,9 @@
-<?php require_once('data_mapper.php') ?>
-<?php require_once(SRC_DIR . '/domain_objects/exam.php') ?>
-<?php require_once(SRC_DIR . '/domain_objects/subject.php') ?>
-<?php require_once(SRC_DIR . '/domain_objects/exam_type.php') ?>
-
 <?php
+  require_once('data_mapper.php');
+  require_once(SRC_DIR . '/domain_objects/exam.php');
+  require_once(SRC_DIR . '/domain_objects/subject.php');
+  require_once(SRC_DIR . '/domain_objects/exam_type.php');
+
   class ExamsDM extends DataMapper {
     public function __construct() {
       parent::__construct();

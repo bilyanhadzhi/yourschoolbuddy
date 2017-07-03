@@ -42,19 +42,19 @@
   <section class="section-container">
     <h2 class="green">Add an exam</h2>
     <form class="add-exam-form" method="post" action="/add_exam">
-      <select name="subject_id" required>
+      <select name="subject_id">
         <option value="" selected disabled>Subject</option>
         <?php foreach ($subjects as $subject): ?>
           <option value="<?=$subject->id?>"><?=$subject->name?></option>
         <?php endforeach ?>
       </select>
-      <select name="type_id" required>
+      <select name="type_id">
         <option value="" selected disabled>Type</option>
         <?php foreach ($exam_types as $exam_type): ?>
           <option value="<?=$exam_type->id?>"><?=$exam_type->name?></option>
         <?php endforeach ?>
       </select>
-      <input type="date" name="exam_date" id="exam-date" required value="<?=$today?>">
+      <input type="date" name="exam_date" id="exam-date" value="<?=$today?>">
       <select name="grade">
         <option value="" selected disabled>Grade</option>
         <option value="">No grade yet</option>
