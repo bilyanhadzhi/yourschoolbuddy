@@ -1,5 +1,7 @@
 'use strict';
 
+/* You're about to see some terrible code. :/ Sorry... */
+
 document.addEventListener('DOMContentLoaded', function() {
   var flashContainer = document.querySelector('.flash');
   var studyBtn = document.querySelector('#study-btn');
@@ -16,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var closeTimerBtn = document.getElementById('close-timer-btn');
     var studySubject = document.getElementById('study-subject');
 
+    // TODO: refactor this shit
     var timer = {
       element: document.getElementById('timer'),
       containerElement: document.getElementById('timer-container'),
@@ -23,15 +26,45 @@ document.addEventListener('DOMContentLoaded', function() {
         startPauseBtn: document.getElementById('timer-start-pause-btn'),
         stopBtn: document.getElementById('timer-stop-btn'),
       },
+      bar: {
+        element: document.getElementById('timer-bar'),
+        timeElement: document.getElementById('timer-bar-time-remaining'),
+        statusElement: document.getElementById('timer-bar-status'),
+      },
       times: {
-        work: '25:00',
-        rest: '05:00',
+        work: '00:10',
+        rest: '00:05',
       },
       interval: null,
       isRunning: false,
       isInWorkingMode: true,
       init: function() {
-        this.element.textContent = this.times.work;
+        // TODO: a lot of duplication, terrible code. please fix it :@
+        // especially the duplication of the two timers
+
+        if (localStorage.getItem('currentTime') !== this.times.work) {
+          this.element.textContent = localStorage.getItem('currentTime');
+          this.bar.timeElement.textContent = this.element.textContent;
+
+          this.isInWorkingMode = localStorage.getItem('isInWorkingMode');
+          studySubject.value = localStorage.getItem('subjectID');
+
+          // TODO: refactor all of this shit
+          this.bar.element.className = 'container';
+          this.bar.element.className += this.isInWorkingMode ? ' timer-work' : ' timer-rest';
+          this.bar.statusElement.textContent = this.isInWorkingMode ? 'working' : 'resting';
+
+          if (localStorage.getItem('isRunning')) {
+            this.start();
+            this.buttons.startPauseBtn.textContent = 'Pause ';
+          }
+        } else {
+          this.element.textContent = this.times.work;
+          this.bar.timeElement.textContent = this.element.textContent;
+
+          this.bar.element.className = 'container timer-not-running';
+          this.bar.statusElement.textContent = 'not running';
+        }
       },
       show: function() {
         this.containerElement.style.display = 'block';
@@ -44,21 +77,61 @@ document.addEventListener('DOMContentLoaded', function() {
       start: function() {
         this.interval = setInterval(this.countDown.bind(this), 1000);
         this.isRunning = true;
+        localStorage.setItem('isRunning', 'true');
+
+        this.bar.element.className = 'container';
+        this.bar.element.className += this.isInWorkingMode ? ' timer-work' : ' timer-rest';
+        this.bar.statusElement.textContent = this.isInWorkingMode ? 'working' : 'resting';
       },
       pause: function() {
         clearInterval(this.interval);
         this.isRunning = false;
-      },
-      stop: function() {
-        this.reset();
-        this.isInWorkingMode = true;
+        localStorage.setItem('isRunning', '');
       },
       reset: function() {
         this.pause();
-        this.init();
+
+        this.element.textContent = this.times.work;
+
+        this.bar.timeElement.textContent = this.element.textContent;
+        this.bar.element.className = 'container timer-not-running';
+        this.bar.statusElement.textContent = 'not running';
+
+        this.isInWorkingMode = true;
+        studySubject.value = "";
+
+        localStorage.setItem('currentTime', this.times.work);
+        localStorage.setItem('isInWorkingMode', this.isInWorkingMode ? 'true' : '');
+        localStorage.setItem('subjectID', studySubject.value);
       },
       countDown: function() {
-        this.element.textContent = countdown(this.element.textContent);
+        if (this.element.textContent === '00:00') {
+          this.changeStatus();
+        } else {
+          this.element.textContent = countdown(this.element.textContent);
+        }
+
+        this.bar.timeElement.textContent = this.element.textContent;
+
+        localStorage.setItem('currentTime', this.element.textContent);
+        localStorage.setItem('isInWorkingMode', this.isInWorkingMode ? 'true' : '');
+        localStorage.setItem('subjectID', studySubject.value);
+      },
+      changeStatus: function() {
+        this.isInWorkingMode = !this.isInWorkingMode;
+
+        localStorage.setItem('isInWorkingMode', this.isInWorkingMode ? 'true' : '');
+        this.element.textContent = this.isInWorkingMode ? this.times.work : this.times.rest;
+
+        if (this.isInWorkingMode) {
+          this.bar.element.classList.remove('timer-rest');
+          this.bar.element.classList.add('timer-work');
+          this.bar.statusElement.textContent = 'working';
+        } else {
+          this.bar.element.classList.remove('timer-work');
+          this.bar.element.classList.add('timer-rest');
+          this.bar.statusElement.textContent = 'resting';
+        }
       },
       triggerStartPauseBtnLabel: function() {
         if (this.buttons.startPauseBtn.textContent === 'Start') {
@@ -68,6 +141,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
     };
+
+    timer.init();
 
     studyBtn.addEventListener('click', function() {
       timer.show();
@@ -92,7 +167,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     timer.buttons.stopBtn.addEventListener('click', function() {
-      timer.stop();
+      timer.reset();
+      timer.buttons.startPauseBtn.textContent = 'Start';
     });
   }
 

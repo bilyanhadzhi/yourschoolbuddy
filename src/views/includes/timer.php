@@ -20,3 +20,14 @@
     </section>
   </main>
 </div>
+
+<div id="timer-bar" class="container">
+  <section>
+    <span id="timer-bar-time-remaining">25:00</span>
+    <span>remaining</span>
+  </section>
+  <section>
+    <span>Status:</span>
+    <span id="timer-bar-status">working</span>
+  </section>
+</div>
