@@ -1,3 +1,5 @@
+'use strict';
+
 document.addEventListener('DOMContentLoaded', function() {
   var flashContainer = document.querySelector('.flash');
   var studyBtn = document.querySelector('#study-btn');
@@ -11,47 +13,87 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   if (studyBtn) {
-    var timerContainer = document.getElementById('timer-container');
     var closeTimerBtn = document.getElementById('close-timer-btn');
     var studySubject = document.getElementById('study-subject');
-    var timer = document.getElementById('timer');
 
-    var timerBtns = {
-      startPauseBtn: document.getElementById('timer-start-pause-btn'),
-      stopBtn: document.getElementById('timer-stop-btn'),
+    var timer = {
+      element: document.getElementById('timer'),
+      containerElement: document.getElementById('timer-container'),
+      buttons: {
+        startPauseBtn: document.getElementById('timer-start-pause-btn'),
+        stopBtn: document.getElementById('timer-stop-btn'),
+      },
+      times: {
+        work: '25:00',
+        rest: '05:00',
+      },
+      interval: null,
+      isRunning: false,
+      isInWorkingMode: true,
+      init: function() {
+        this.element.textContent = this.times.work;
+      },
+      show: function() {
+        this.containerElement.style.display = 'block';
+        this.containerElement.classList.remove('hide');
+      },
+      hide: function() {
+        this.containerElement.style.display = 'hidden';
+        this.containerElement.classList.add('hide');
+      },
+      start: function() {
+        this.interval = setInterval(this.countDown.bind(this), 1000);
+        this.isRunning = true;
+      },
+      pause: function() {
+        clearInterval(this.interval);
+        this.isRunning = false;
+      },
+      stop: function() {
+        this.reset();
+        this.isInWorkingMode = true;
+      },
+      reset: function() {
+        this.pause();
+        this.init();
+      },
+      countDown: function() {
+        this.element.textContent = countdown(this.element.textContent);
+      },
+      triggerStartPauseBtnLabel: function() {
+        if (this.buttons.startPauseBtn.textContent === 'Start') {
+          this.buttons.startPauseBtn.textContent = 'Pause';
+        } else {
+          this.buttons.startPauseBtn.textContent = 'Start';
+        }
+      }
     };
 
     studyBtn.addEventListener('click', function() {
-      showTimer();
+      timer.show();
     });
 
     closeTimerBtn.addEventListener('click', function() {
-      hideTimer();
+      timer.hide();
     });
 
-    timerBtns.startPauseBtn.addEventListener('click', function() {
+    timer.buttons.startPauseBtn.addEventListener('click', function() {
       if (studySubject.value === "") {
-        console.log('No subject selected');
+        alert('No subject selected');
       } else {
-        startCountdown(timer);
-        triggerStartBtnLabel(timerBtns.startPauseBtn);
+        if (timer.isRunning) {
+          timer.pause();
+        } else {
+          timer.start();
+        }
+
+        timer.triggerStartPauseBtnLabel();
       }
     });
 
-    timerBtns.stopBtn.addEventListener('click', function() {
-      console.log('Stop!!');
-      // TODO
+    timer.buttons.stopBtn.addEventListener('click', function() {
+      timer.stop();
     });
-  }
-
-  function showTimer() {
-    timerContainer.style.display = 'block';
-    timerContainer.classList.remove('hide');
-  }
-
-  function hideTimer() {
-    timerContainer.style.display = 'hidden';
-    timerContainer.classList.add('hide');
   }
 
   function countdown(timeStr) {
@@ -67,12 +109,6 @@ document.addEventListener('DOMContentLoaded', function() {
     timeArr[1] = timeArr[1] < 10 ? '0' + timeArr[1] : timeArr[1];
 
     return timeArr.join(':');
-  }
-
-  function startCountdown(timer) {
-    setInterval(function() {
-      timer.textContent = countdown(timer.textContent);
-    }, 1000)
   }
 
   function triggerStartBtnLabel(button) {
