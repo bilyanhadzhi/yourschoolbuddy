@@ -42,4 +42,6 @@
   <?php endif ?>
 </div>
 
+<?php require_once('includes/timer.php') ?>
+
 <?php require_once('includes/footer.php') ?>
