@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var timer = {
     times: {
-      work: 25 * 60,
-      rest: 5 * 60,
+      work: 10,
+      rest: 5,
     },
     state: {
       currentTime: null,
@@ -47,8 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
       this.bindEvents();
 
       this.setInitialState();
-      console.log(this.state);
-
       this.render();
     },
     checkIfExists: function() {
@@ -64,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
         studyButtonEl: document.getElementById('study-btn'),
         closeContainerButtonEl: document.getElementById('close-timer-btn'),
         startPauseButtonEl: document.getElementById('timer-start-pause-btn'),
-        stopButtonEl: document.getElementById('timer-stop-btn'),
+        resetButtonEl: document.getElementById('timer-reset-btn'),
       };
       this.bottomBar = {
         el: document.getElementById('timer-bar'),
@@ -75,11 +73,18 @@ document.addEventListener('DOMContentLoaded', function() {
     bindEvents: function() {
       this.buttons.studyButtonEl.addEventListener('click', this.openContainer.bind(this));
       this.buttons.closeContainerButtonEl.addEventListener('click', this.closeContainer.bind(this));
-      this.buttons.startPauseButtonEl.addEventListener('click', this.decideToStartOrPause.bind(this));
+      this.buttons.startPauseButtonEl.addEventListener('click', this.handleStartOrPause.bind(this));
+      this.buttons.resetButtonEl.addEventListener('click', this.handleReset.bind(this));
     },
     render: function() {
-      this.el.textContent = this.secondsToTimeStr(this.state.currentTime);
-      this.bottomBar.el.textContent = this.secondsToTimeStr(this.state.currentTime);
+      this.updateTime();
+
+      this.updateBarStatus();
+      this.updateBarColor();
+
+      this.updateStartPauseButtonLabel();
+
+      console.log(this.state);
     },
     setInitialState: function() {
       if (!this.checkIfTimeInLocalStorage()) {
@@ -109,7 +114,12 @@ document.addEventListener('DOMContentLoaded', function() {
       this.state.isRunning = true;
     },
     countDown: function() {
-      this.state.currentTime--;
+      if (this.state.currentTime <= 0) {
+        this.changeStatus();
+      } else {
+        this.state.currentTime--;
+      }
+
       this.render();
     },
     pause: function() {
@@ -118,13 +128,61 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     reset: function() {
       this.pause();
+
+      this.state.currentTime = this.times.work;
+      this.isInWorkingMode = true;
     },
-    decideToStartOrPause: function() {
+    handleStartOrPause: function() {
       if (this.state.isRunning) {
         this.pause();
       } else {
         this.start();
       }
+
+      this.render();
+    },
+    handleReset: function() {
+      this.reset();
+      this.render();
+    },
+    updateTime: function() {
+      this.el.textContent = this.secondsToTimeStr(this.state.currentTime);
+      this.bottomBar.timeEl.textContent = this.secondsToTimeStr(this.state.currentTime);
+    },
+    updateStartPauseButtonLabel: function() {
+      this.buttons.startPauseButtonEl.textContent = this.state.isRunning ? 'Pause' : 'Start';
+    },
+    updateBarStatus: function() {
+      if (!this.state.isRunning) {
+        if (this.state.currentTime === this.times.work) {
+          this.bottomBar.statusEl.textContent = 'not running';
+        }
+      } else {
+        this.bottomBar.statusEl.textContent = this.state.isInWorkingMode ? 'working' : 'resting';
+      }
+    },
+    updateBarColor: function() {
+      if (!this.state.isRunning) {
+        if (!this.bottomBar.el.classList.contains('timer-not-running')) {
+          this.bottomBar.el.classList.remove('timer-rest', 'timer-work');
+          this.bottomBar.el.classList.add('timer-not-running');
+        }
+      } else if (!this.state.isInWorkingMode) {
+        if (!this.bottomBar.el.classList.contains('timer-rest')) {
+          this.bottomBar.el.classList.remove('timer-not-running', 'timer-work');
+          this.bottomBar.el.classList.add('timer-rest');
+        }
+      } else {
+        if (!this.bottomBar.el.classList.contains('timer-work')) {
+          this.bottomBar.el.classList.remove('timer-not-running', 'timer-rest');
+          this.bottomBar.el.classList.add('timer-work');
+        }
+      }
+    },
+    changeStatus: function() {
+      this.state.isInWorkingMode = !this.state.isInWorkingMode;
+
+      this.state.currentTime = this.state.isInWorkingMode ? this.times.work : this.times.rest;
     },
     secondsToTimeStr: function(seconds) {
       var timeArr = [parseInt(seconds / 60), parseInt(seconds % 60)];
@@ -142,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
     closeContainer: function() {
       this.containerEl.style.display = 'hidden';
       this.containerEl.classList.add('hide');
-    }
+    },
   };
 
   flash.init();

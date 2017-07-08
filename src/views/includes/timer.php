@@ -16,12 +16,12 @@
     </section>
     <section class="timer-buttons-section">
       <button id="timer-start-pause-btn">Start</button>
-      <button id="timer-stop-btn">Stop</button>
+      <button id="timer-reset-btn">Reset</button>
     </section>
   </main>
 </div>
 
-<div id="timer-bar" class="container">
+<div id="timer-bar" class="container timer-not-running">
   <section>
     <span id="timer-bar-time-remaining">00:00</span>
     <span>remaining</span>
