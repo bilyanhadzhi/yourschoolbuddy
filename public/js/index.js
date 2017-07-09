@@ -93,10 +93,14 @@ document.addEventListener('DOMContentLoaded', function() {
         this.state.currentTime = this.times.work;
         this.state.currentSubject = null;
       } else {
-        this.state.isRunning = localStorage.getItem('isRunning');
-        this.state.isInWorkingMode = localStorage.getItem('isInWorkingMode');
-        this.state.currentTime = localStorage.getItem('currentTime');
-        this.state.currentSubject = localStorage.getItem('currentSubject');
+        this.state.isRunning = JSON.parse(localStorage.getItem('isRunning'));
+        this.state.isInWorkingMode = JSON.parse(localStorage.getItem('isInWorkingMode'));
+        this.state.currentTime = JSON.parse(localStorage.getItem('currentTime'));
+        this.state.currentSubject = JSON.parse(localStorage.getItem('currentSubject'));
+
+        if (this.state.isRunning) {
+          this.start();
+        }
       }
     },
     checkIfTimeInLocalStorage: function() {
@@ -120,17 +124,22 @@ document.addEventListener('DOMContentLoaded', function() {
         this.state.currentTime--;
       }
 
+      this.updateLocalStorage();
       this.render();
     },
     pause: function() {
       clearInterval(this.interval);
       this.state.isRunning = false;
+
+      this.updateLocalStorage();
     },
     reset: function() {
       this.pause();
 
       this.state.currentTime = this.times.work;
-      this.isInWorkingMode = true;
+      this.state.isInWorkingMode = true;
+
+      this.updateLocalStorage();
     },
     handleStartOrPause: function() {
       if (this.state.isRunning) {
@@ -148,6 +157,12 @@ document.addEventListener('DOMContentLoaded', function() {
     updateTime: function() {
       this.el.textContent = this.secondsToTimeStr(this.state.currentTime);
       this.bottomBar.timeEl.textContent = this.secondsToTimeStr(this.state.currentTime);
+    },
+    updateLocalStorage: function() {
+      localStorage.setItem('currentTime', this.state.currentTime);
+      localStorage.setItem('currentSubject', this.state.currentSubject);
+      localStorage.setItem('isRunning', this.state.isRunning);
+      localStorage.setItem('isInWorkingMode', this.state.isInWorkingMode);
     },
     updateStartPauseButtonLabel: function() {
       this.buttons.startPauseButtonEl.textContent = this.state.isRunning ? 'Pause' : 'Start';
