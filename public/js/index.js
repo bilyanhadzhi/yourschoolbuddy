@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
       this.buttons.startPauseButtonEl.addEventListener('click', this.handleStartOrPause.bind(this));
       this.buttons.resetButtonEl.addEventListener('click', this.handleReset.bind(this));
       this.subjectEl.addEventListener('change', this.updateCurrentSubject.bind(this));
-      document.addEventListener('keydown', this.handleKeyPress.bind(this));
+      window.addEventListener('keydown', this.handleKeyPress.bind(this));
     },
     render: function() {
       this.updateTime();
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
       this.render();
     },
     handleKeyPress: function(e) {
-      var keysLookup = [32, 83];
+      var keysLookup = [27, 32, 83];
 
       if (!keysLookup.includes(e.keyCode)) {
         return;
@@ -178,6 +178,11 @@ document.addEventListener('DOMContentLoaded', function() {
             break;
           case 83:
             this.triggerContainer();
+            break;
+          case 27:
+            if (!this.containerEl.classList.contains('hide')) {
+              this.closeContainer();
+            }
             break;
         }
       }
@@ -242,6 +247,8 @@ document.addEventListener('DOMContentLoaded', function() {
     openContainer: function() {
       this.containerEl.style.display = 'block';
       this.containerEl.classList.remove('hide');
+
+      this.subjectEl.focus();
     },
     closeContainer: function() {
       this.containerEl.style.display = 'hidden';

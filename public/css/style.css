@@ -391,11 +391,7 @@ input[type="submit"] {
 }
 
 .timer-buttons-section button:active {
-  transform: scale(0.99);
-}
-
-.timer-buttons-section button:focus {
-  outline: none;
+  transform: scale(0.98);
 }
 
 #timer-bar {
