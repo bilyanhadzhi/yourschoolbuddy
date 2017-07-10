@@ -101,7 +101,9 @@ document.addEventListener('DOMContentLoaded', function() {
         this.state.currentTime = JSON.parse(localStorage.getItem('currentTime'));
         this.state.currentSubject = JSON.parse(localStorage.getItem('currentSubject'));
 
-        this.subjectEl.value = this.state.currentSubject;
+        if (this.state.currentSubject) {
+          this.subjectEl.value = this.state.currentSubject;
+        }
 
         if (this.state.isRunning) {
           this.start();
@@ -148,6 +150,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
       this.state.currentTime = this.times.work;
       this.state.isInWorkingMode = true;
+      this.state.currentSubject = null;
+
+      this.subjectEl.children[0].selected = true;
 
       this.updateLocalStorage();
     },
@@ -165,18 +170,18 @@ document.addEventListener('DOMContentLoaded', function() {
       this.render();
     },
     handleKeyPress: function(e) {
-      var keysLookup = [27, 32, 83];
+      var keysLookup = [27, 83, 84];
 
       if (!keysLookup.includes(e.keyCode)) {
         return;
       } else {
         switch (e.keyCode) {
-          case 32:
+          case 83:
             if (this.containerEl.classList.contains('hide')) {
               this.handleStartOrPause();
             }
             break;
-          case 83:
+          case 84:
             this.triggerContainer();
             break;
           case 27:

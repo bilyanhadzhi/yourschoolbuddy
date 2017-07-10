@@ -54,10 +54,6 @@ input[type="submit"] {
   background-color: transparent;
 }
 
-.inline-form-button:focus {
-  outline: none;
-}
-
 .hide {
   transform: scale(0);
   opacity: 0;
@@ -137,7 +133,7 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-.close-section-btn:active, .close-section-btn:focus {
+.close-section-btn:active {
   outline: none;
 }
 
