@@ -75,9 +75,12 @@ document.addEventListener('DOMContentLoaded', function() {
       this.buttons.closeContainerButtonEl.addEventListener('click', this.closeContainer.bind(this));
       this.buttons.startPauseButtonEl.addEventListener('click', this.handleStartOrPause.bind(this));
       this.buttons.resetButtonEl.addEventListener('click', this.handleReset.bind(this));
+      this.subjectEl.addEventListener('change', this.updateCurrentSubject.bind(this));
+      document.addEventListener('keydown', this.handleKeyPress.bind(this));
     },
     render: function() {
       this.updateTime();
+      this.updateCurrentSubject();
 
       this.updateBarStatus();
       this.updateBarColor();
@@ -98,6 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
         this.state.currentTime = JSON.parse(localStorage.getItem('currentTime'));
         this.state.currentSubject = JSON.parse(localStorage.getItem('currentSubject'));
 
+        this.subjectEl.value = this.state.currentSubject;
+
         if (this.state.isRunning) {
           this.start();
         }
@@ -114,6 +119,11 @@ document.addEventListener('DOMContentLoaded', function() {
       return true;
     },
     start: function() {
+      if (!this.state.currentSubject) {
+        alert('No subject selected');
+        return;
+      }
+
       this.interval = setInterval(this.countDown.bind(this), 1000);
       this.state.isRunning = true;
     },
@@ -154,9 +164,32 @@ document.addEventListener('DOMContentLoaded', function() {
       this.reset();
       this.render();
     },
+    handleKeyPress: function(e) {
+      var keysLookup = [32, 83];
+
+      if (!keysLookup.includes(e.keyCode)) {
+        return;
+      } else {
+        switch (e.keyCode) {
+          case 32:
+            if (this.containerEl.classList.contains('hide')) {
+              this.handleStartOrPause();
+            }
+            break;
+          case 83:
+            this.triggerContainer();
+            break;
+        }
+      }
+    },
     updateTime: function() {
       this.el.textContent = this.secondsToTimeStr(this.state.currentTime);
       this.bottomBar.timeEl.textContent = this.secondsToTimeStr(this.state.currentTime);
+    },
+    updateCurrentSubject: function() {
+      if (this.state.currentSubject !== this.subjectEl.value) {
+        this.state.currentSubject = this.subjectEl.value;
+      }
     },
     updateLocalStorage: function() {
       localStorage.setItem('currentTime', this.state.currentTime);
@@ -168,10 +201,8 @@ document.addEventListener('DOMContentLoaded', function() {
       this.buttons.startPauseButtonEl.textContent = this.state.isRunning ? 'Pause' : 'Start';
     },
     updateBarStatus: function() {
-      if (!this.state.isRunning) {
-        if (this.state.currentTime === this.times.work) {
-          this.bottomBar.statusEl.textContent = 'not running';
-        }
+      if (!this.state.isRunning && this.state.currentTime === this.times.work) {
+        this.bottomBar.statusEl.textContent = 'not running';
       } else {
         this.bottomBar.statusEl.textContent = this.state.isInWorkingMode ? 'working' : 'resting';
       }
@@ -200,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
       this.state.currentTime = this.state.isInWorkingMode ? this.times.work : this.times.rest;
     },
     secondsToTimeStr: function(seconds) {
-      var timeArr = [parseInt(seconds / 60), parseInt(seconds % 60)];
+      var timeArr = [parseInt(seconds / 60, 10), parseInt(seconds % 60, 10)];
 
       timeArr = timeArr.map(function(secondsSegment) {
         return secondsSegment < 10 ? '0' + secondsSegment : secondsSegment;
@@ -215,6 +246,13 @@ document.addEventListener('DOMContentLoaded', function() {
     closeContainer: function() {
       this.containerEl.style.display = 'hidden';
       this.containerEl.classList.add('hide');
+    },
+    triggerContainer: function() {
+      if (this.containerEl.classList.contains('hide')) {
+        this.openContainer();
+      } else {
+        this.closeContainer();
+      }
     },
   };
 
