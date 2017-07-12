@@ -8,39 +8,53 @@
     public static $FLASH_GREEN = 'flash-green';
     public static $FLASH_BLUE = 'flash-blue';
 
+    public static $AVAILABLE_ROUTES = [
+      '', 'log_in', 'log_out', 'register','add_exam', 'edit_exam', 'delete_exam',
+      'begin_study_session'
+    ];
+
     public function set_current_url($url) {
       $this->url_params = $url === '' ? [''] : explode('/', rtrim($url, '/'));
       $this->url_params_len = count($this->url_params);
     }
 
     public function get_from_current_url() {
+      $first_param = $this->url_params[0];
+
+      if (!in_array($first_param, self::$AVAILABLE_ROUTES)) {
+        $this->page_not_found();
+        exit;
+      }
+
       switch($this->url_params[0]) {
         case '':
-          $this->not_one_param() ? $this->page_not_found() : $this->get('/home.php', true);
+          $this->not_one_param() ? $this->page_not_found() : $this->load('/home.php', true);
           break;
         case 'log_in':
-          $this->not_one_param() ? $this->page_not_found() : $this->get('/log_in.php', false);
+          $this->not_one_param() ? $this->page_not_found() : $this->load('/log_in.php', false);
           break;
         case 'log_out':
-          $this->not_one_param() ? $this->page_not_found() : $this->get('/log_out.php', true);
+          $this->not_one_param() ? $this->page_not_found() : $this->load('/log_out.php', true);
           break;
         case 'register':
-          $this->not_one_param() ? $this->page_not_found() : $this->get('/register.php', false);
+          $this->not_one_param() ? $this->page_not_found() : $this->load('/register.php', false);
           break;
         case 'add_exam':
-          $this->not_one_param() ? $this->page_not_found() : $this->get('/add_exam.php', true);
+          $this->not_one_param() ? $this->page_not_found() : $this->load('/add_exam.php', true);
           break;
         case 'edit_exam':
-          if (count($this->get_url_params()) > 2) {
+          if (count($this->url_params) > 2) {
             $this->page_not_found();
             exit;
           }
-          $params = count($this->get_url_params()) === 2 ? ['exam_id' => $this->url_params[1]] : null;
-          $this->get('/edit_exam.php', true, $params);
+          $params = count($this->url_params) === 2 ? ['exam_id' => $this->url_params[1]] : null;
+          $this->load('/edit_exam.php', true, $params);
           break;
         case 'delete_exam':
-          $this->not_one_param() ? $this->page_not_found() : $this->get('/delete_exam.php', true);
+          $this->not_one_param() ? $this->page_not_found() : $this->load('/delete_exam.php', true);
           break;
+        case 'begin_study_session':
+          $this->not_one_param() ? $this->page_not_found() : $this->load('/begin_study_session.php', true);
         default:
           $this->page_not_found();
       }
@@ -58,7 +72,7 @@
       header('Location: ' . ROOT_URL . $url);
     }
 
-    public function get($page_name, $protected, $params = NULL) {
+    public function load($page_name, $protected, $params = NULL) {
       $is_logged_in = isset($_SESSION['student_id']);
 
       if (($page_name === '/log_in.php' || $page_name === '/register.php') && $is_logged_in) {
@@ -81,7 +95,7 @@
 
     public function page_not_found() {
       http_response_code(404);
-   // TODO: $this->get('/not_found.php, false');
+   // TODO: $this->load('/not_found.php, false');
       echo '404 Error: Page not found';
       exit;
     }
@@ -90,12 +104,8 @@
       return $this->url_params_len > 1;
     }
 
-    public function get_url_params() {
-      return $this->url_params;
-    }
-
     public function get_current_url() {
-      return implode('/', $this->get_url_params());
+      return implode('/', $this->url_params);
     }
   }
 ?>

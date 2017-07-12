@@ -12,9 +12,25 @@
         $sql = 'SELECT * FROM subjects';
 
         $query = $this->handler->query($sql);
-        $query->setFetchMode(PDO_FETCH_CLASS, 'Subject');
+        $query->setFetchMode(PDO::FETCH_CLASS, 'Subject');
 
         return $query->fetchAll();
+      } catch (PDOException $e) {
+        echo $e;
+      }
+    }
+
+    public function get_by_id($id) {
+      try {
+        $sql = 'SELECT * FROM subjects
+                WHERE id = :id';
+
+        $query = $this->handler->prepare($sql);
+        $query->execute([':id' => $id]);
+
+        $query->setFetchMode(PDO::FETCH_CLASS, 'Subject');
+
+        return $query->fetch();
       } catch (PDOException $e) {
         echo $e;
       }
