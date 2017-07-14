@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var timer = {
     times: {
-      work: 10,
-      rest: 5,
+      work: 25 * 60,
+      rest: 5 * 60,
     },
     state: {
       currentTime: null,
@@ -146,6 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
       this.state.isRunning = false;
 
       this.updateLocalStorage();
+
+
     },
     reset: function() {
       this.pause();
@@ -161,8 +163,10 @@ document.addEventListener('DOMContentLoaded', function() {
     handleStartOrPause: function() {
       if (this.state.isRunning) {
         this.pause();
+        this.endStudySession();
       } else {
         this.start();
+
       }
 
       this.render();
@@ -282,6 +286,25 @@ document.addEventListener('DOMContentLoaded', function() {
       };
 
       request.send(params);
+    },
+    endStudySession: function() {
+      var url = '/end_study_session';
+
+      var request = new XMLHttpRequest();
+
+      request.open('PUT', url, true);
+      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+
+      request.onreadystatechange = function() {
+        if(request.readyState === 4 && request.status === 200) {
+          console.log(request.responseText);
+        }
+      };
+
+      request.send();
+    },
+    resetStudySession: function() {
+      this.endStudySession();
     },
   };
 

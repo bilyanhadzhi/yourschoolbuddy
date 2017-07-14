@@ -4,7 +4,7 @@
 
   $router = new Router;
 
-  if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
+  if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     $router->redirect_to('/');
     exit;
   }
