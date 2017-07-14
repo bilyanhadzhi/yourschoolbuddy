@@ -14,6 +14,11 @@
   $student_id = $_SESSION['student_id'];
   $latest_study_session = $study_sessions_dm->get_latest_started_for_student($student_id);
 
+  if (!$latest_study_session) {
+    echo 'No previous sessions to end';
+    return;
+  }
+
   $study_sessions_dm->end($latest_study_session);
   echo 'OK';
 ?>

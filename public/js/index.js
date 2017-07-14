@@ -121,15 +121,9 @@ document.addEventListener('DOMContentLoaded', function() {
       return true;
     },
     start: function() {
-      if (!this.state.currentSubject) {
-        alert('No subject selected');
-        return;
-      }
-
+      this.countDown();
       this.interval = setInterval(this.countDown.bind(this), 1000);
       this.state.isRunning = true;
-
-      this.beginStudySession();
     },
     countDown: function() {
       if (this.state.currentTime <= 0) {
@@ -146,8 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
       this.state.isRunning = false;
 
       this.updateLocalStorage();
-
-
     },
     reset: function() {
       this.pause();
@@ -159,14 +151,18 @@ document.addEventListener('DOMContentLoaded', function() {
       this.subjectEl.children[0].selected = true;
 
       this.updateLocalStorage();
+      this.endStudySession();
     },
     handleStartOrPause: function() {
-      if (this.state.isRunning) {
+      if (this.subjectEl.value === '') {
+        alert('No subject selected');
+        return;
+      } else if (this.state.isRunning) {
         this.pause();
         this.endStudySession();
       } else {
         this.start();
-
+        this.beginStudySession();
       }
 
       this.render();
@@ -201,8 +197,14 @@ document.addEventListener('DOMContentLoaded', function() {
       this.bottomBar.timeEl.textContent = this.secondsToTimeStr(this.state.currentTime);
     },
     updateCurrentSubject: function() {
-      if (this.state.currentSubject !== this.subjectEl.value) {
+      if (this.subjectEl.value === '') {
+        return;
+      } else if (this.state.currentSubject !== this.subjectEl.value) {
         this.state.currentSubject = this.subjectEl.value;
+
+        if (this.state.isRunning) {
+          this.resetStudySession();
+        }
       }
     },
     updateLocalStorage: function() {
@@ -243,6 +245,12 @@ document.addEventListener('DOMContentLoaded', function() {
       this.state.isInWorkingMode = !this.state.isInWorkingMode;
 
       this.state.currentTime = this.state.isInWorkingMode ? this.times.work : this.times.rest;
+
+      if (!this.state.isInWorkingMode) {
+        this.endStudySession();
+      } else {
+        this.beginStudySession();
+      }
     },
     secondsToTimeStr: function(seconds) {
       var timeArr = [parseInt(seconds / 60, 10), parseInt(seconds % 60, 10)];
@@ -271,6 +279,10 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     },
     beginStudySession: function() {
+      if (!this.state.isInWorkingMode) {
+        return;
+      }
+
       var url = '/begin_study_session';
       var params = 'subject_id=' + this.subjectEl.value;
 
@@ -305,6 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     resetStudySession: function() {
       this.endStudySession();
+      this.beginStudySession();
     },
   };
 

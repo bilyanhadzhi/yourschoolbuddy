@@ -21,7 +21,7 @@
 
   if ($validation_errors) {
     foreach ($validation_errors as $validation_error) {
-      echo $validation_error . '<br>';
+      echo $validation_error . "\n";
     }
     exit;
   }

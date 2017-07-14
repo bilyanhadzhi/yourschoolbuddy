@@ -16,7 +16,7 @@
 
         return $query->execute([
           ':student_id' => $study_session->student_id,
-          ':subject_id' => $study_session->student_id,
+          ':subject_id' => $study_session->subject_id,
         ]);
       } catch (PDOException $e) {
         echo $e;
