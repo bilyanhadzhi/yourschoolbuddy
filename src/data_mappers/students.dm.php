@@ -1,6 +1,7 @@
 <?php
   require_once('data_mapper.php');
   require_once(SRC_DIR . '/domain_objects/student.php');
+  require_once(SRC_DIR . '/data_mappers/study_sessions.dm.php');
 
   class StudentsDM extends DataMapper {
     public function __construct() {
@@ -87,6 +88,24 @@
         }
 
         return $student;
+      } catch (PDOException $e) {
+        echo $e;
+      }
+    }
+
+    public function update_last_active_on($id) {
+      try {
+        $sql = 'UPDATE students
+                SET last_active_on = CURRENT_TIMESTAMP
+                WHERE id = :id';
+
+        $query = $this->handler->prepare($sql);
+
+        $query->execute([':id' => $id]);
+
+        $study_sessions_dm = new StudySessionsDM;
+
+        $study_sessions_dm->delete_all_forgotten_sessions();
       } catch (PDOException $e) {
         echo $e;
       }

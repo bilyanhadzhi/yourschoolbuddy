@@ -55,6 +55,56 @@
       }
     }
 
+    public function get_forgotten_sessions() {
+      try {
+        $sql = 'SELECT study_sessions.id
+                FROM study_sessions
+                JOIN students
+                  ON students.id = study_sessions.student_id
+                WHERE TIMESTAMPDIFF(MINUTE, students.last_active_on, NOW()) > 30
+                  AND study_sessions.end_date IS NULL';
+
+        $query = $this->handler->prepare($sql);
+
+        $query->execute();
+
+        $query->setFetchMode(PDO::FETCH_CLASS, 'stdClass');
+
+        return $query->fetchAll();
+      } catch (PDOException $e) {
+        echo $e;
+      }
+    }
+
+    public function delete_forgotten_session_by_id($id) {
+      if (!$id) {
+        return;
+      }
+
+      try {
+        $sql = 'DELETE FROM study_sessions
+                WHERE id = :id';
+
+        $query = $this->handler->prepare($sql);
+
+        return $query->execute([':id' => $id]);
+      } catch (PDOException $e) {
+        echo $e;
+      }
+    }
+
+    public function delete_all_forgotten_sessions() {
+      try {
+        $forgotten_sessions = $this->get_forgotten_sessions();
+
+        foreach ($forgotten_sessions as $forgotten_session) {
+          $this->delete_forgotten_session_by_id($forgotten_session->id);
+        }
+      } catch (PDOException $e) {
+        echo $e;
+      }
+    }
+
     public function get_latest_started_for_student($student_id) {
       try {
         $sql = 'SELECT * FROM study_sessions

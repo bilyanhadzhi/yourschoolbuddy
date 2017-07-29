@@ -1,6 +1,32 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function() {
+  var user = {
+    init: function() {
+      this.setUpStatusUpdates();
+    },
+    setUpStatusUpdates: function() {
+      this.updateLastActiveOn();
+      setInterval(this.updateLastActiveOn.bind(this), 60000);
+    },
+    updateLastActiveOn: function() {
+      var url = '/update_last_active_on';
+
+      var request = new XMLHttpRequest();
+
+      request.open('POST', url, true);
+      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+
+      request.onreadystatechange = function() {
+        if(request.readyState === 4 && request.status === 200) {
+          console.log(request.responseText);
+        }
+      };
+
+      request.send();
+    }
+  };
+
   var flash = {
     init: function() {
       if (!this.checkIfExists()) {
@@ -128,6 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
     countDown: function() {
       if (this.state.currentTime <= 0) {
         this.changeStatus();
+        this.pause();
       } else {
         this.state.currentTime--;
       }
@@ -139,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
       clearInterval(this.interval);
       this.state.isRunning = false;
 
+      this.endStudySession();
       this.updateLocalStorage();
     },
     reset: function() {
@@ -321,6 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
     },
   };
 
+  user.init();
   flash.init();
   timer.init();
 });

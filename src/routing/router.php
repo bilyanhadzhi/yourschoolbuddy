@@ -10,7 +10,7 @@
 
     public static $AVAILABLE_ROUTES = [
       '', 'log_in', 'log_out', 'register','add_exam', 'edit_exam', 'delete_exam',
-      'begin_study_session', 'end_study_session'
+      'begin_study_session', 'end_study_session', 'update_last_active_on',
     ];
 
     public function set_current_url($url) {
@@ -58,6 +58,9 @@
           break;
         case 'end_study_session':
           $this->not_one_param() ? $this->page_not_found() : $this->load('/end_study_session.php', true);
+          break;
+        case 'update_last_active_on':
+          $this->not_one_param() ? $this->page_not_found() : $this->load('/update_last_active_on.php', true);
           break;
         default:
           $this->page_not_found();
