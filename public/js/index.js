@@ -112,8 +112,6 @@ document.addEventListener('DOMContentLoaded', function() {
       this.updateBarColor();
 
       this.updateStartPauseButtonLabel();
-
-      console.log(this.state);
     },
     setInitialState: function() {
       if (!this.checkIfTimeInLocalStorage()) {
