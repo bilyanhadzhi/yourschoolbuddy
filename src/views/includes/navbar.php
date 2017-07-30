@@ -2,7 +2,7 @@
   <ul class="left">
     <?php if (isset($_SESSION['student_id'])): ?>
       <li><a href="/">Exams</a></li>
-      <li><a href="/">Stats</a></li>
+      <li><a href="/stats/<?=$_SESSION['student_id']?>">Stats</a></li>
     <?php endif ?>
   </ul>
   <ul class="right">

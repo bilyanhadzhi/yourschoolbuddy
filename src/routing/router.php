@@ -1,7 +1,6 @@
 <?php
   class Router {
     private $url_params;
-    private $url_params_len;
     private $flash_classes;
 
     public static $FLASH_RED = 'flash-red';
@@ -10,12 +9,11 @@
 
     public static $AVAILABLE_ROUTES = [
       '', 'log_in', 'log_out', 'register','add_exam', 'edit_exam', 'delete_exam',
-      'begin_study_session', 'end_study_session', 'update_last_active_on',
+      'begin_study_session', 'end_study_session', 'update_last_active_on', 'stats',
     ];
 
     public function set_current_url($url) {
       $this->url_params = $url === '' ? [''] : explode('/', rtrim($url, '/'));
-      $this->url_params_len = count($this->url_params);
     }
 
     public function get_from_current_url() {
@@ -62,6 +60,17 @@
         case 'update_last_active_on':
           $this->not_one_param() ? $this->page_not_found() : $this->load('/update_last_active_on.php', true);
           break;
+        case 'stats':
+          if (count($this->url_params) > 2) {
+            $this->page_not_found();
+            exit;
+          } elseif (count($this->url_params) < 2) {
+            $this->redirect_to('/');
+            exit;
+          }
+          $params = ['student_id' => $this->url_params[1]];
+          $this->load('/stats.php', true, $params);
+          break;
         default:
           $this->page_not_found();
       }
@@ -79,7 +88,7 @@
       header('Location: ' . ROOT_URL . $url);
     }
 
-    public function load($page_name, $protected, $params = NULL) {
+    public function load($page_name, $protected, $params = null) {
       $is_logged_in = isset($_SESSION['student_id']);
 
       if (($page_name === '/log_in.php' || $page_name === '/register.php') && $is_logged_in) {
@@ -108,7 +117,7 @@
     }
 
     private function not_one_param() {
-      return $this->url_params_len > 1;
+      return count($this->url_params) > 1;
     }
 
     public function get_current_url() {
