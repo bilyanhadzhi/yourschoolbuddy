@@ -13,7 +13,7 @@
 
   $db_driver = 'mysql:host=' . $db_host . ';dbname=' . $database;
 
-  $root_url = 'https://mysterious-plateau-59715.herokuapp.com';
+  $root_url = 'https://yourschoolbuddy.herokuapp.com';
 
   define('PROJECT_ROOT_DIR', $project_root_dir);
   define('SRC_DIR', $src_dir);
