@@ -82,8 +82,8 @@ input[type="submit"] {
   display: flex;
 }
 
-#navbar ul li {
-  height: 100%;
+#navbar ul li * {
+  line-height: 3;
 }
 
 .left li {
