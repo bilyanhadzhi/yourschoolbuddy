@@ -34,18 +34,46 @@
   <section class="section-container">
     <h2 class="green">Upcoming exams</h2>
     <ul class="exams-list">
-      <?php if ($exams): ?>
-        <?php foreach ($exams as $exam): ?>
+      <?php if ($exams->upcoming): ?>
+        <?php foreach ($exams->upcoming as $upcoming_exam): ?>
           <li>
             <section>
-              <span class="subject-name"><?=$exam->subject_name?></span>:
-              <span><?=date_format(date_create($exam->date), 'l, F \t\h\e jS');?></span>,
-              <span><?=$exam->type?></span>
+              <span class="subject-name"><?=$upcoming_exam->subject_name?></span>:
+              <span><?=date_format(date_create($upcoming_exam->date), 'l, F \t\h\e jS');?></span>,
+              <span><?=$upcoming_exam->type?></span>
             </section>
             <section class="exam-management">
-              <a class="edit-btn" href="/edit_exam/<?=$exam->id?>">Edit</a>
+              <a class="edit-btn" href="/edit_exam/<?=$upcoming_exam->id?>">Edit</a>
               <form action="/delete_exam" class="inline-form" method="post">
-                <input name="exam_id" type="hidden" value="<?=$exam->id?>">
+                <input name="exam_id" type="hidden" value="<?=$upcoming_exam->id?>">
+                <input name="student_id" type="hidden" value="<?=$student->id?>">
+                <input class="inline-form-button delete-btn" type="submit" value="Delete"
+                      onclick="return confirm('Are you sure?')">
+              </form>
+            </section>
+          </li>
+        <?php endforeach ?>
+      <?php else: ?>
+        <li>There are no exams here.</li>
+      <?php endif ?>
+    </ul>
+  </section>
+
+  <section class="section-container">
+    <h2 class="green">Past exams</h2>
+    <ul class="exams-list">
+      <?php if ($exams->past): ?>
+        <?php foreach ($exams->past as $past_exam): ?>
+          <li>
+            <section>
+              <span class="subject-name"><?=$past_exam->subject_name?></span>:
+              <span><?=date_format(date_create($past_exam->date), 'l, F \t\h\e jS');?></span>,
+              <span><?=$past_exam->type?></span>
+            </section>
+            <section class="exam-management">
+              <a class="edit-btn" href="/edit_exam/<?=$past_exam->id?>">Edit</a>
+              <form action="/delete_exam" class="inline-form" method="post">
+                <input name="exam_id" type="hidden" value="<?=$past_exam->id?>">
                 <input name="student_id" type="hidden" value="<?=$student->id?>">
                 <input class="inline-form-button delete-btn" type="submit" value="Delete"
                       onclick="return confirm('Are you sure?')">

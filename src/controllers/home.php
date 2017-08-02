@@ -19,11 +19,23 @@
   $exams_dm = new ExamsDM;
 
   $student = $students_dm->get_by_id($_SESSION['student_id']);
-
-  $exams = $exams_dm->get_for_student($_SESSION['student_id']);
   $grades = $exams_dm->get_grades();
   $subjects = $exams_dm->get_subjects();
   $exam_types = $exams_dm->get_exam_types();
+
+  $all_exams = $exams_dm->get_for_student($_SESSION['student_id']);
+
+  $exams = new stdClass;
+  $exams->upcoming = [];
+  $exams->past = [];
+
+  foreach ($all_exams as $exam) {
+    if (time() - strtotime($exam->date) < 0) {
+      $exams->upcoming[] = $exam;
+    } else {
+      $exams->past[] = $exam;
+    }
+  }
 ?>
 
 <?php require_once(SRC_DIR . '/views/' . basename(__FILE__)) ?>

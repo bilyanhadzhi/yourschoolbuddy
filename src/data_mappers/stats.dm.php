@@ -16,7 +16,7 @@
 
         $query->execute([':student_id' => $student_id]);
 
-        $query->setFetchMode(PDO::FETCH_CLASS, 'stdClass');
+        $query->setFetchMode(PDO::FETCH_OBJ);
 
         return $query->fetchAll();
       } catch (PDOException $e) {
