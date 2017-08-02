@@ -6,8 +6,6 @@
   if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     $router->redirect_to('/');
     exit;
-  } elseif (!isset($_SESSION['student_id'])) {
-    exit;
   }
 
   $students_dm = new StudentsDM;

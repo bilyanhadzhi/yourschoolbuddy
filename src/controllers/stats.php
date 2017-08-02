@@ -37,8 +37,6 @@
     $router->redirect_to('/stats/' . $_SESSION['student_id'],
                          ['You can only see your stats'], Router::$FLASH_RED);
   }
-
-  // prepare stats data to be displayed by charts
 ?>
 
 <?php require_once(SRC_DIR . '/views/' . basename(__FILE__)) ?>

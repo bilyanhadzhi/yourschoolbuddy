@@ -10,6 +10,7 @@
     public static $AVAILABLE_ROUTES = [
       '', 'log_in', 'log_out', 'register','add_exam', 'edit_exam', 'delete_exam',
       'begin_study_session', 'end_study_session', 'update_last_active_on', 'stats',
+      'api',
     ];
 
     public function set_current_url($url) {
@@ -61,15 +62,24 @@
           $this->not_one_param() ? $this->page_not_found() : $this->load('/update_last_active_on.php', true);
           break;
         case 'stats':
-          if (count($this->url_params) > 2) {
+          if (count($this->url_params) !== 2) {
             $this->page_not_found();
-            exit;
-          } elseif (count($this->url_params) < 2) {
-            $this->redirect_to('/');
             exit;
           }
           $params = ['student_id' => $this->url_params[1]];
           $this->load('/stats.php', true, $params);
+          break;
+        case 'api':
+          if (count($this->url_params) !== 2) {
+            $this->page_not_found();
+            exit;
+          }
+          switch ($this->url_params[1]) {
+            case 'stats':
+              $this->load('/stats_api.php', true);
+            default:
+              $this->page_not_found();
+          }
           break;
         default:
           $this->page_not_found();
