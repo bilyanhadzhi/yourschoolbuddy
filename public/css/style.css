@@ -420,6 +420,11 @@ input[type="submit"] {
   background-color: #E64A19;
 }
 
+.chart-container {
+  position: relative;
+  padding-top: 16px;
+}
+
 /* Media queries */
 @media screen and (min-width: 800px) {
   .container {
