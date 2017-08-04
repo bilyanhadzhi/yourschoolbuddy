@@ -63,6 +63,10 @@ input[type="submit"] {
   opacity: 0;
 }
 
+.destroy {
+  display: none;
+}
+
 /* Container styles */
 .container {
   min-width: 310px;
@@ -247,6 +251,7 @@ input[type="submit"] {
 }
 
 .add-exam-form * {
+  border: 1px solid rgba(0, 0, 0, 0.3);
   height: 30px;
   width: 180px;
   margin: 0 0 5px;
@@ -420,9 +425,25 @@ input[type="submit"] {
   background-color: #E64A19;
 }
 
+/* Stats styles */
 .chart-container {
   position: relative;
   padding-top: 16px;
+}
+
+.range-selection-container {
+  margin-bottom: 20px;
+}
+
+.range-selection-container *:not(button) {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  height: 30px;
+  width: 150px;
+  margin: 0 0 5px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  color: #333333;
+  padding: 5px;
 }
 
 /* Media queries */

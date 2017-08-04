@@ -14,13 +14,21 @@
 
     if ($validation_errors) {
       $messages = $validation_errors;
-      $values = ['name' => $_POST['name'], 'email' => $_POST['email'], 'password' => $_POST['password']];
+      $values = [
+        'name' => htmlspecialchars($_POST['name']),
+        'email' => htmlspecialchars($_POST['email']),
+        'password' => htmlspecialchars($_POST['password']),
+      ];
     } else {
       $students_dm = new StudentsDM;
 
       if ($students_dm->exists($student->name, $student->email)) {
         $messages[] = 'A user with the same username and/or email address already exists';
-        $values = ['name' => $_POST['name'], 'email' => $_POST['email'], 'password' => $_POST['password']];
+        $values = [
+          'name' => htmlspecialchars($_POST['name']),
+          'email' => htmlspecialchars($_POST['email']),
+          'password' => htmlspecialchars($_POST['password']),
+        ];
       } else {
         $students_dm->create($student);
         $messages[] = 'You registered successfully!';

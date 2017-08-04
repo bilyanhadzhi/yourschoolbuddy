@@ -8,9 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
       labels: [],
       data: [],
     },
-    getForPeriod: function(range_start, range_end) {
-      var params = 'range_start=' + range_start + '&range_end=' + range_end;
-
+    getForPeriod: function(params) {
       this.request.open('POST', this.url, true);
       this.request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 
@@ -23,12 +21,15 @@ document.addEventListener('DOMContentLoaded', function() {
       if(this.request.readyState === 4 && this.request.status === 200) {
         response = JSON.parse(this.request.responseText);
 
+        charts.historyChart.data.labels = [];
+        charts.historyChart.data.datasets[0].data = [];
+
         Object.keys(response).forEach(function(date) {
-          this.chartInfo.labels.push(date);
-          this.chartInfo.data.push(response[date]);
+          charts.historyChart.data.labels.push(date);
+          charts.historyChart.data.datasets[0].data.push(response[date]);
         }.bind(this));
 
-        chart.create('time-studied-bar-chart', barChartOptions);
+        charts.historyChart.update();
       }
     },
   };
@@ -37,18 +38,16 @@ document.addEventListener('DOMContentLoaded', function() {
     create: function(selector, options) {
       var context = document.getElementById(selector).getContext('2d');
 
-      new Chart(context, options);
+      return new Chart(context, options);
     },
   };
-
-  statsAPI.getForPeriod('2017-07-26', '2017-08-04');
 
   var barChartOptions = {
     type: 'bar',
     data: {
-      labels: statsAPI.chartInfo.labels,
+      labels: null,
       datasets: [{
-        data: statsAPI.chartInfo.data,
+        data: null,
         label: 'Time studied',
         backgroundColor: 'rgba(56,142,60, 0.7)',
         borderColor: 'rgba(56,142,60, 0.9)',
@@ -75,6 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             return formatted;
           },
+          title: function(tooltipItem, chartData) {
+            return moment(chartData.labels[tooltipItem[0].index]).format("ddd, MMM Do");
+          },
         },
       },
       legend: {
@@ -85,15 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
         yAxes: [{
           ticks: {
             beginAtZero: true,
-            callback: function(label, index, labels) {
-              if (Math.floor(label) === label) {
-                return label;
-              } else {
-                return '';
-              }
-            },
             fontFamily: '"Nunito", sans-serif',
             fontSize: 13,
+            stepSize: 15,
           }
         }],
         xAxes: [{
@@ -111,5 +107,51 @@ document.addEventListener('DOMContentLoaded', function() {
         }],
       },
     },
+  };
+
+  var rangeSelection = {
+    init: function() {
+      this.cacheDom();
+      this.bindEvents();
+    },
+    cacheDom: function() {
+      this.rangeSelectorEl = document.getElementById('range-select');
+      this.rangeInputs = {
+        start: document.getElementById('range-start-input'),
+        end: document.getElementById('range-end-input'),
+      };
+      this.reloadButton = document.getElementById('reload-stats-btn');
+    },
+    bindEvents: function() {
+      this.rangeSelectorEl.addEventListener('change', this.handleChange.bind(this));
+      this.reloadButton.addEventListener('click', this.handleReload.bind(this));
+    },
+    handleChange: function() {
+    },
+    handleReload: function() {
+      statsAPI.getForPeriod(this.rangeSelectorEl.value);
+    },
+    setRangeInputStatus: function(status) {
+      if (status === true) {
+        this.rangeInputs.forEach(function(rangeInput) {
+          if (rangeInput.classList.contains('destroy')) {
+            rangeInput.classList.remove('destroy');
+          }
+        });
+      } else {
+        this.rangeInputs.forEach(function(rangeInput) {
+          if (!rangeInput.classList.contains('destroy')) {
+            rangeInput.classList.add('destroy');
+          }
+        });
+      }
+    },
+  };
+
+  rangeSelection.init();
+  statsAPI.getForPeriod(rangeSelection.rangeSelectorEl.value);
+
+  var charts = {
+    historyChart: chart.create('time-studied-bar-chart', barChartOptions),
   };
 });
