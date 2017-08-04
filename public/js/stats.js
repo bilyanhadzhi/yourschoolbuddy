@@ -1,57 +1,54 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function() {
-  var url = '/api/stats';
-  var params = 'range_start=' + '2017-07-26' + '&range_end=' + '2017-08-04';
+  var statsAPI = {
+    url: '/api/stats',
+    request: new XMLHttpRequest(),
+    chartInfo: {
+      labels: [],
+      data: [],
+    },
+    getForPeriod: function(range_start, range_end) {
+      var params = 'range_start=' + range_start + '&range_end=' + range_end;
 
-  var request = new XMLHttpRequest();
+      this.request.open('POST', this.url, true);
+      this.request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 
-  request.open('POST', url, true);
-  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+      this.request.onreadystatechange = this.handleResponse.bind(this);
+      this.request.send(params);
+    },
+    handleResponse: function() {
+      var response = null;
 
-  var response = null;
-  var labels = [];
-  var data = [];
+      if(this.request.readyState === 4 && this.request.status === 200) {
+        response = JSON.parse(this.request.responseText);
 
-  request.onreadystatechange = function() {
-    if(request.readyState === 4 && request.status === 200) {
-      response = JSON.parse(request.responseText);
+        Object.keys(response).forEach(function(date) {
+          this.chartInfo.labels.push(date);
+          this.chartInfo.data.push(response[date]);
+        }.bind(this));
 
-      Object.keys(response).forEach(function(date) {
-        labels.push(date);
-        data.push(response[date]);
-      });
-
-      createChart(labels, data, barChartOptions);
-    }
+        chart.create('time-studied-bar-chart', barChartOptions);
+      }
+    },
   };
 
-  request.send(params);
+  var chart = {
+    create: function(selector, options) {
+      var context = document.getElementById(selector).getContext('2d');
 
-  function decimalToMinutesAndSeconds(minutes) {
-    if (minutes < 0) {
-      return null;
-    }
+      new Chart(context, options);
+    },
+  };
 
-    var min = Math.floor(Math.abs(minutes));
-    var sec = Math.floor((Math.abs(minutes) * 60) % 60);
-
-    var formatted = min + (min === 1 ? ' minute' : ' minutes');
-
-    if (sec !== 0) {
-      formatted += ' and ' + sec;
-      formatted += sec === 1 ? ' second' : ' seconds';
-    }
-
-    return formatted;
-  }
+  statsAPI.getForPeriod('2017-07-26', '2017-08-04');
 
   var barChartOptions = {
     type: 'bar',
     data: {
-      labels: labels,
+      labels: statsAPI.chartInfo.labels,
       datasets: [{
-        data: data,
+        data: statsAPI.chartInfo.data,
         label: 'Time studied',
         backgroundColor: 'rgba(56,142,60, 0.7)',
         borderColor: 'rgba(56,142,60, 0.9)',
@@ -61,8 +58,22 @@ document.addEventListener('DOMContentLoaded', function() {
     options: {
       tooltips: {
         callbacks: {
-          label: function(tooltipItem, data) {
-            return decimalToMinutesAndSeconds(tooltipItem.yLabel);
+          label: function(tooltipItem) {
+            if (tooltipItem.yLabel < 0) {
+              return null;
+            }
+
+            var minutes = Math.floor(Math.abs(tooltipItem.yLabel));
+            var seconds = Math.floor((Math.abs(tooltipItem.yLabel) * 60) % 60);
+
+            var formatted = minutes + (minutes === 1 ? ' minute' : ' minutes');
+
+            if (seconds !== 0) {
+              formatted += ' and ' + seconds;
+              formatted += seconds === 1 ? ' second' : ' seconds';
+            }
+
+            return formatted;
           },
         },
       },
@@ -101,10 +112,4 @@ document.addEventListener('DOMContentLoaded', function() {
       },
     },
   };
-
-  function createChart(labels, data, options) {
-    var context = document.getElementById('time-studied-bar-chart').getContext('2d');
-
-    var barChart = new Chart(context, options);
-  }
 });
