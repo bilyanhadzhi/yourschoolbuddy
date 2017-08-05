@@ -8,6 +8,9 @@
 
     public function get_daily_time_studied_for_student($student_id, $range_start, $range_end) {
       try {
+        $range_start = new DateTime($range_start);
+        $range_end = (new DateTime($range_end))->modify('tomorrow');
+
         $sql = 'SELECT * FROM study_sessions
                 WHERE student_id = :student_id
                   AND end_date IS NOT NULL
@@ -18,20 +21,22 @@
 
         $query->execute([
           ':student_id' => $student_id,
-          ':range_start' => $range_start,
-          ':range_end' => $range_end,
+          ':range_start' => $range_start->format('Y-m-d H:i:s'),
+          ':range_end' => $range_end->format('Y-m-d H:i:s'),
         ]);
+
+        $range_end->modify('yesterday');
 
         $query->setFetchMode(PDO::FETCH_OBJ);
         $study_sessions = $query->fetchAll();
 
-        $num_of_days_in_range = ceil(abs(strtotime($range_start) - strtotime($range_end)) / 60 / 60 / 24);
+        $num_of_days_in_range = $range_end->diff($range_start)->format("%a");
+        $num_of_days_in_range_left = $num_of_days_in_range;
         $labels = [];
 
-        $num_of_days_in_range_left = $num_of_days_in_range;
-
         while ($num_of_days_in_range_left >= 0) {
-          $date = new DateTime($range_end);
+          $date = new DateTime($range_end->format('Y-m-d H:i:s'));
+
           $date->modify('-' . $num_of_days_in_range_left . ' days');
 
           $labels[$date->format('Y-m-d')] = 0;
@@ -41,7 +46,7 @@
 
         $minutes_studied = 0;
 
-        // TODO: account for sessions that span out over two days
+        // TODO: account for sessions that span over two days
         foreach ($study_sessions as $study_session) {
           $minutes_studied_current_session = abs(strtotime($study_session->start_date) - strtotime($study_session->end_date)) / 60;
           $date = new DateTime($study_session->end_date);
