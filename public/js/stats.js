@@ -101,8 +101,15 @@ document.addEventListener('DOMContentLoaded', function() {
           ticks: {
             beginAtZero: true,
             fontFamily: '"Nunito", sans-serif',
-            fontSize: 13,
-            stepSize: 30,
+            fontSize: 12,
+            stepSize: 20,
+            callback: function (value) {
+              if (value % 60 === 0) {
+                return value;
+              } else {
+                return null;
+              }
+            },
           },
         }],
         xAxes: [{
@@ -115,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
               return moment(label).format("MMM Do");
             },
             fontFamily: '"Nunito", sans-serif',
-            fontSize: 13,
+            fontSize: 12,
             fontStyle: 'bold',
           },
         }],
@@ -167,8 +174,15 @@ document.addEventListener('DOMContentLoaded', function() {
           ticks: {
             beginAtZero: true,
             fontFamily: '"Nunito", sans-serif',
-            fontSize: 13,
-            stepSize: 30,
+            fontSize: 12,
+            stepSize: 20,
+            callback: function (value) {
+              if (value % 60 === 0) {
+                return value;
+              } else {
+                return null;
+              }
+            },
           },
         }],
         xAxes: [{
@@ -177,7 +191,9 @@ document.addEventListener('DOMContentLoaded', function() {
             display: false,
           },
           ticks: {
-
+            fontFamily: '"Nunito", sans-serif',
+            fontSize: 10,
+            fontStyle: 'bold',
           },
         }],
       },
