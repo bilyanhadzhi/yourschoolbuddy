@@ -428,7 +428,11 @@ input[type="submit"] {
 /* Stats styles */
 .chart-container {
   position: relative;
-  padding-top: 16px;
+   padding-bottom: 64px;
+}
+
+.chart-container h2 {
+  margin-bottom: 16px;
 }
 
 .range-selection-container {

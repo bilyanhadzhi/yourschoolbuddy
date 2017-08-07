@@ -21,15 +21,27 @@ document.addEventListener('DOMContentLoaded', function() {
       if(this.request.readyState === 4 && this.request.status === 200) {
         response = JSON.parse(this.request.responseText);
 
-        charts.historyChart.data.labels = [];
-        charts.historyChart.data.datasets[0].data = [];
+        Object.keys(charts).forEach(function(chartName) {
+          charts[chartName].data.labels = [];
+          charts[chartName].data.datasets[0].data = [];
+        });
 
-        Object.keys(response).forEach(function(date) {
-          charts.historyChart.data.labels.push(date);
-          charts.historyChart.data.datasets[0].data.push(response[date]);
+        Object.keys(response.timeStudiedDaily).forEach(function(date) {
+          charts.timeStudiedDaily.data.labels.push(date);
+          charts.timeStudiedDaily.data.datasets[0].data.push(response.timeStudiedDaily[date]);
         }.bind(this));
 
-        charts.historyChart.update();
+        Object.keys(response.timeStudiedPerSubject)
+          .sort(function(a, b) {
+            return response.timeStudiedPerSubject[b] - response.timeStudiedPerSubject[a];
+          })
+          .forEach(function(subjectName) {
+            charts.timeStudiedPerSubject.data.labels.push(subjectName);
+            charts.timeStudiedPerSubject.data.datasets[0].data.push(response.timeStudiedPerSubject[subjectName]);
+          }.bind(this));
+
+        charts.timeStudiedDaily.update();
+        charts.timeStudiedPerSubject.update();
       }
     },
   };
@@ -42,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
     },
   };
 
-  var barChartOptions = {
+  var timeStudiedDailyChartOptions = {
     type: 'bar',
     data: {
       labels: null,
@@ -85,14 +97,16 @@ document.addEventListener('DOMContentLoaded', function() {
       responsive: true,
       scales: {
         yAxes: [{
+          stacked: true,
           ticks: {
             beginAtZero: true,
             fontFamily: '"Nunito", sans-serif',
             fontSize: 13,
-            stepSize: 15,
-          }
+            stepSize: 30,
+          },
         }],
         xAxes: [{
+          stacked: true,
           gridLines: {
             display: false,
           },
@@ -103,7 +117,68 @@ document.addEventListener('DOMContentLoaded', function() {
             fontFamily: '"Nunito", sans-serif',
             fontSize: 13,
             fontStyle: 'bold',
-          }
+          },
+        }],
+      },
+    },
+  };
+
+  var timeStudiedPerSubjectChartOptions = {
+    type: 'bar',
+    data: {
+      labels: null,
+      datasets: [{
+        data: null,
+        label: 'Time studied',
+        backgroundColor: 'rgba(56,142,60, 0.7)',
+        borderColor: 'rgba(56,142,60, 0.9)',
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      tooltips: {
+        callbacks: {
+          label: function(tooltipItem) {
+            if (tooltipItem.yLabel < 0) {
+              return null;
+            }
+
+            var minutes = Math.floor(Math.abs(tooltipItem.yLabel));
+            var seconds = Math.floor((Math.abs(tooltipItem.yLabel) * 60) % 60);
+
+            var formatted = minutes + (minutes === 1 ? ' minute' : ' minutes');
+
+            if (seconds !== 0) {
+              formatted += ' and ' + seconds;
+              formatted += seconds === 1 ? ' second' : ' seconds';
+            }
+
+            return formatted;
+          },
+        },
+      },
+      legend: {
+        display: false,
+      },
+      responsive: true,
+      scales: {
+        yAxes: [{
+          stacked: true,
+          ticks: {
+            beginAtZero: true,
+            fontFamily: '"Nunito", sans-serif',
+            fontSize: 13,
+            stepSize: 30,
+          },
+        }],
+        xAxes: [{
+          stacked: true,
+          gridLines: {
+            display: false,
+          },
+          ticks: {
+
+          },
         }],
       },
     },
@@ -152,6 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
   statsAPI.getForPeriod(rangeSelection.rangeSelectorEl.value);
 
   var charts = {
-    historyChart: chart.create('time-studied-bar-chart', barChartOptions),
+    timeStudiedDaily: chart.create('time-studied-bar-chart', timeStudiedDailyChartOptions),
+    timeStudiedPerSubject: chart.create('time-studied-per-subject-bar-chart', timeStudiedPerSubjectChartOptions),
   };
 });

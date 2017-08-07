@@ -19,9 +19,13 @@
   </section>
 
   <section class="section-container">
-    <h2 class="green">Time studied (minutes)</h2>
     <section class="chart-container">
+      <h2 class="green">Time studied (minutes)</h2>
       <canvas id="time-studied-bar-chart" width="500" height="200"></canvas>
+    </section>
+    <section class="chart-container">
+      <h2 class="green">Time studied per subject (minutes)</h2>
+      <canvas id="time-studied-per-subject-bar-chart" width="500" height="200"></canvas>
     </section>
   </section>
 
