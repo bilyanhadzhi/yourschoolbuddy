@@ -15,8 +15,6 @@
     <form action="/register" method="post">
       <input type="text" name="name" placeholder="Username" required autofocus
              value=<?=$values['name']?>>
-      <input type="email" name="email" placeholder="Email" required
-             value=<?=$values['email']?>>
       <input type="password" name="password" placeholder="Password" required
              value=<?=$values['password']?>>
       <input type="submit" name="submit" value="Register" class="submit-btn">

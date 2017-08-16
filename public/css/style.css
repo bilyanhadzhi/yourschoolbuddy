@@ -428,7 +428,7 @@ input[type="submit"] {
 /* Stats styles */
 .chart-container {
   position: relative;
-   padding-bottom: 64px;
+  padding-bottom: 32px;
 }
 
 .chart-container h2 {
@@ -471,5 +471,9 @@ input[type="submit"] {
   .add-exam-form * {
     width: auto;
     margin: 0 0 0 5px;
+  }
+
+  .chart-container {
+    padding-bottom: 64px;
   }
 }

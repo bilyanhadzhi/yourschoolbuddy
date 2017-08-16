@@ -8,14 +8,14 @@
       parent::__construct();
     }
 
-    public function exists(string $name, string $email): bool {
+    public function exists(string $name): bool {
       try {
         $sql = 'SELECT * FROM students
-                WHERE name = :name OR email = :email
+                WHERE name = :name
                 LIMIT 1';
 
         $query = $this->handler->prepare($sql);
-        $query->execute([':name' => $name, ':email' => $email]);
+        $query->execute([':name' => $name]);
 
         $found = $query->rowCount();
         if ($found) {
@@ -33,13 +33,12 @@
       try {
         $student->password = password_hash($student->password, PASSWORD_BCRYPT, ['cost' => 12]);
 
-        $sql = 'INSERT INTO students (name, email, password)
-                VALUES (:name, :email, :password)';
+        $sql = 'INSERT INTO students (name, password)
+                VALUES (:name, :password)';
 
         $query = $this->handler->prepare($sql);
         $query->execute([
           ':name' => $student->name,
-          ':email' => $student->email,
           ':password' => $student->password,
         ]);
 

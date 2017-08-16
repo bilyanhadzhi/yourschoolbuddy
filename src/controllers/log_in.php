@@ -11,7 +11,7 @@
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $student = new Student;
-    $student->construct($_POST['name'], null, $_POST['password']);
+    $student->construct($_POST['name'], $_POST['password']);
 
     $validation_errors = $student->validate_login();
 

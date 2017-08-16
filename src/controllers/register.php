@@ -4,11 +4,11 @@
   require_once(SRC_DIR . '/domain_objects/student.php');
 
   $title = 'Register';
-  $values = ['name' => '', 'email' => '', 'password' => ''];
+  $values = ['name' => '', 'password' => ''];
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $student = new Student;
-    $student->construct($_POST['name'], $_POST['email'], $_POST['password']);
+    $student->construct($_POST['name'], $_POST['password']);
 
     $validation_errors = $student->validate_register();
 
@@ -16,17 +16,15 @@
       $messages = $validation_errors;
       $values = [
         'name' => htmlspecialchars($_POST['name']),
-        'email' => htmlspecialchars($_POST['email']),
         'password' => htmlspecialchars($_POST['password']),
       ];
     } else {
       $students_dm = new StudentsDM;
 
-      if ($students_dm->exists($student->name, $student->email)) {
-        $messages[] = 'A user with the same username and/or email address already exists';
+      if ($students_dm->exists($student->name)) {
+        $messages[] = 'A user with the same username already exists';
         $values = [
           'name' => htmlspecialchars($_POST['name']),
-          'email' => htmlspecialchars($_POST['email']),
           'password' => htmlspecialchars($_POST['password']),
         ];
       } else {
