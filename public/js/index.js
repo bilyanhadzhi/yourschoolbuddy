@@ -74,6 +74,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
       this.setInitialState();
       this.render();
+
+      this.endSound = new Audio(
+        'https://res.cloudinary.com/bilyan5500/video/upload/v1472491190/notification_o8rb8m.wav'
+      );
     },
     checkIfExists: function() {
       var studyButtonEl = document.querySelector('#study-btn');
@@ -268,6 +272,8 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     },
     changeStatus: function() {
+      this.playSound();
+
       this.state.isInWorkingMode = !this.state.isInWorkingMode;
 
       this.state.currentTime = this.state.isInWorkingMode ? this.times.work : this.times.rest;
@@ -277,6 +283,9 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         this.beginStudySession();
       }
+    },
+    playSound: function() {
+      this.endSound.play();
     },
     secondsToTimeStr: function(seconds) {
       var timeArr = [parseInt(seconds / 60, 10), parseInt(seconds % 60, 10)];

@@ -27,7 +27,7 @@
       try {
         $minute_difference = $this->get_minute_difference($study_session->start_date);
 
-        if ($minute_difference === 0) {
+        if ($minute_difference === 0 || $minute_difference > 30) {
           return $this->delete($study_session->id);
         }
 

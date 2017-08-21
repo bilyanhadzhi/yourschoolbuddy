@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
           stacked: true,
           ticks: {
             beginAtZero: true,
-            fontFamily: '"Nunito", sans-serif',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
             fontSize: 12,
             stepSize: 20,
             callback: function (value) {
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
             callback: function(label, index, labels) {
               return moment(label).format("MMM Do");
             },
-            fontFamily: '"Nunito", sans-serif',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
             fontSize: 12,
             fontStyle: 'bold',
           },
@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
           stacked: true,
           ticks: {
             beginAtZero: true,
-            fontFamily: '"Nunito", sans-serif',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
             fontSize: 12,
             stepSize: 20,
             callback: function (value) {
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
             display: false,
           },
           ticks: {
-            fontFamily: '"Nunito", sans-serif',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
             fontSize: 10,
             fontStyle: 'bold',
           },
