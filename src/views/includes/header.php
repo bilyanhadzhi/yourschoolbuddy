@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <?php require_once('favicons.php') ?>
   <link rel="stylesheet" href="/css/style.css">
-  <title><?=isset($title) ? 'YourSchoolBuddy – ' . $title : 'YourSchoolBuddy'?></title>
+  <title><?=isset($title) ? $title . ' – YourSchoolBuddy' : 'YourSchoolBuddy'?></title>
 </head>
 <body>
   <?php require_once('navbar.php') ?>
