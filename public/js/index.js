@@ -149,7 +149,6 @@ document.addEventListener('DOMContentLoaded', function() {
       return true;
     },
     start: function() {
-      this.countDown();
       this.interval = setInterval(this.countDown.bind(this), 1000);
       this.state.isRunning = true;
     },

@@ -228,13 +228,17 @@ input[type="submit"] {
 }
 
 .exams-list li {
-  padding: 0 0 20px 30px;
+  padding: 10px;
+  margin-bottom: 10px;
   font-size: 1.2rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.4);
 }
 
-.exams-list li:last-child {
+/* .exams-list li:last-child {
   padding-bottom: 0;
-}
+} */
 
 .subject-name {
   font-weight: bold;

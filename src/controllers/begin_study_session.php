@@ -26,6 +26,7 @@
     exit;
   }
 
-  $study_sessions_dm->begin($study_session);
-  echo 'OK';
+  if ($study_sessions_dm->begin($study_session)) {
+    echo 'OK';
+  }
 ?>
