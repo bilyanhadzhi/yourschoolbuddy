@@ -215,10 +215,11 @@ document.addEventListener('DOMContentLoaded', function() {
           alert('No subject selected');
           return;
         } else {
-
           if (self.state.isRunning) {
             self.pause();
-            self.endStudySession();
+            if (data.is_running !== 0) {
+              self.endStudySession();
+            }
           } else {
             if (data.is_running === 1) {
               alert('A timer is already running');
