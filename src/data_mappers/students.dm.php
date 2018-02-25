@@ -2,6 +2,7 @@
   require_once('data_mapper.php');
   require_once(SRC_DIR . '/domain_objects/student.php');
   require_once(SRC_DIR . '/data_mappers/study_sessions.dm.php');
+  require_once(SRC_DIR . '/data_mappers/timers.dm.php');
 
   class StudentsDM extends DataMapper {
     public function __construct() {
@@ -41,6 +42,11 @@
           ':name' => $student->name,
           ':password' => $student->password,
         ]);
+
+        $student_id = $this->handler->lastInsertId();
+
+        $timers_dm = new TimersDM;
+        $timers_dm->create_for_student($student_id);
 
         return true;
       } catch (PDOException $e) {

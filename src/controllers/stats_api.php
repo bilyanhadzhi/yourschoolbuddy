@@ -12,7 +12,7 @@
   header('Content-type: application/json; charset=utf-8');
 
   $data = $stats_dm->get_stats_for_student($_SESSION['student_id'], $_POST['range_start'], $_POST['range_end']);
-  $data_in_json = json_encode($data);
+  $data_in_json = json_encode($data, JSON_NUMERIC_CHECK);
 
   print_r($data_in_json);
   exit;

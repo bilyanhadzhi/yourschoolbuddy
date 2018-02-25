@@ -10,7 +10,7 @@
     public static $AVAILABLE_ROUTES = [
       '', 'log_in', 'log_out', 'register','add_exam', 'edit_exam', 'delete_exam',
       'begin_study_session', 'end_study_session', 'update_last_active_on', 'stats',
-      'api',
+      'api', 'get_timer', 'update_timer',
     ];
 
     public function set_current_url($url) {
@@ -77,6 +77,13 @@
           switch ($this->url_params[1]) {
             case 'stats':
               $this->load('/stats_api.php', true);
+              break;
+            case 'get_timer':
+              $this->load('/get_timer.php', true);
+              break;
+              case 'update_timer':
+              $this->load('/update_timer.php', true);
+              break;
             default:
               $this->page_not_found();
           }

@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     handleResponse: function() {
       var response = null;
 
-      if(this.request.readyState === 4 && this.request.status === 200) {
+      if (this.request.readyState === 4 && this.request.status === 200) {
         response = JSON.parse(this.request.responseText);
 
         Object.keys(charts).forEach(function(chartName) {

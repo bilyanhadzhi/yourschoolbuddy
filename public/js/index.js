@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 
       request.onreadystatechange = function() {
-        if(request.readyState === 4 && request.status === 200) {
+        if (request.readyState === 4 && request.status === 200) {
           // console.log(request.responseText);
         }
       };
@@ -69,11 +69,19 @@ document.addEventListener('DOMContentLoaded', function() {
         return null;
       }
 
+      var self = this;
+
       this.cacheDom();
       this.bindEvents();
 
-      this.setInitialState();
-      this.render();
+      this.getTimerData().then(function(data) {
+        self.setInitialState(data);
+        self.render();
+
+        if (self.state.isRunning) {
+          self.start();
+        }
+      });
 
       this.endSound = new Audio(
         'https://res.cloudinary.com/bilyan5500/video/upload/v1472491190/notification_o8rb8m.wav'
@@ -116,27 +124,45 @@ document.addEventListener('DOMContentLoaded', function() {
       this.updateBarColor();
 
       this.updateStartPauseButtonLabel();
+
+      if (this.subjectEl.value != this.state.currentSubject) {
+        this.subjectEl.value = this.state.currentSubject;
+      };
+
+      this.updateTimerData();
     },
-    setInitialState: function() {
-      if (!this.checkIfTimeInLocalStorage()) {
+    setInitialState: function(data) {
+      if (!data) {
         this.state.isRunning = false;
         this.state.isInWorkingMode = true;
         this.state.currentTime = this.times.work;
         this.state.currentSubject = null;
-      } else {
-        this.state.isRunning = JSON.parse(localStorage.getItem('isRunning'));
-        this.state.isInWorkingMode = JSON.parse(localStorage.getItem('isInWorkingMode'));
-        this.state.currentTime = JSON.parse(localStorage.getItem('currentTime'));
-        this.state.currentSubject = JSON.parse(localStorage.getItem('currentSubject'));
-
-        if (this.state.currentSubject) {
-          this.subjectEl.value = this.state.currentSubject;
-        }
-
-        if (this.state.isRunning) {
-          this.start();
-        }
+      } else if (data) {
+        this.state.isRunning = data.is_running;
+        this.state.isInWorkingMode = data.is_in_working_mode;
+        this.state.currentTime = data.time_left;
+        this.state.currentSubject = data.subject_id === null ? 0 : data.subject_id;
       }
+
+      this.render();
+    },
+    getTimerData: function() {
+      return new Promise(function(resolve, reject) {
+        var self = this;
+
+        var url = '/api/get_timer';
+        var request = new XMLHttpRequest();
+
+        request.open('GET', url, true);
+
+        request.onreadystatechange = function() {
+          if (request.readyState === 4 && request.status === 200) {
+            resolve(JSON.parse(request.responseText));
+          }
+        };
+
+        request.send();
+      });
     },
     checkIfTimeInLocalStorage: function() {
       if (!localStorage.getItem('currentTime')) {
@@ -174,8 +200,8 @@ document.addEventListener('DOMContentLoaded', function() {
       this.pause();
 
       this.state.currentTime = this.times.work;
-      this.state.isInWorkingMode = true;
-      this.state.currentSubject = null;
+      this.state.isInWorkingMode = 1;
+      this.state.currentSubject = '';
 
       this.subjectEl.children[0].selected = true;
 
@@ -183,22 +209,34 @@ document.addEventListener('DOMContentLoaded', function() {
       this.endStudySession();
     },
     handleStartOrPause: function() {
-      if (this.subjectEl.value === '') {
-        alert('No subject selected');
-        return;
-      } else if (this.state.isRunning) {
-        this.pause();
-        this.endStudySession();
-      } else {
-        this.start();
-        this.beginStudySession();
-      }
+      var self = this;
+      this.getTimerData().then(function(data) {
+        if (self.subjectEl.value === '') {
+          alert('No subject selected');
+          return;
+        } else {
 
-      this.render();
+          if (self.state.isRunning) {
+            self.pause();
+            self.endStudySession();
+          } else {
+            if (data.is_running === 1) {
+              alert('A timer is already running');
+              return;
+            }
+            self.start();
+            self.beginStudySession();
+          }
+          self.updateTimerData();
+        }
+
+        self.render();
+      });
     },
     handleReset: function() {
       this.reset();
       this.render();
+      this.updateTimerData();
     },
     handleKeyPress: function(e) {
       var keysLookup = [27, 83, 84];
@@ -282,6 +320,8 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         this.beginStudySession();
       }
+
+      this.updateTimerData();
     },
     playSound: function() {
       this.endSound.play();
@@ -317,6 +357,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
+      var self = this;
       var url = '/begin_study_session';
       var params = 'subject_id=' + this.subjectEl.value;
 
@@ -326,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function() {
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 
       request.onreadystatechange = function() {
-        if(request.readyState === 4 && request.status === 200) {
+        if (request.readyState === 4 && request.status === 200) {
           // console.log(request.responseText);
         }
       };
@@ -334,6 +375,7 @@ document.addEventListener('DOMContentLoaded', function() {
       request.send(params);
     },
     endStudySession: function() {
+      var self = this;
       var url = '/end_study_session';
 
       var request = new XMLHttpRequest();
@@ -342,16 +384,38 @@ document.addEventListener('DOMContentLoaded', function() {
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 
       request.onreadystatechange = function() {
-        if(request.readyState === 4 && request.status === 200) {
+        if (request.readyState === 4 && request.status === 200) {
           // console.log(request.responseText);
         }
       };
 
       request.send();
     },
+    updateTimerData: function() {
+      var url = '/api/update_timer';
+
+      var request = new XMLHttpRequest();
+
+      request.open('POST', url, true);
+      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+
+      request.onreadystatechange = function() {
+        if (request.readyState === 4 && request.status === 200) {
+          // console.log(request.responseText);
+        }
+      };
+
+      var params = 'subject_id=' + this.state.currentSubject;
+      params += '&time_left=' + this.state.currentTime;
+      params += '&is_in_working_mode=' + this.state.isInWorkingMode;
+      params += '&is_running=' + this.state.isRunning;
+
+      request.send(params);
+    },
     resetStudySession: function() {
       this.endStudySession();
       this.beginStudySession();
+      this.updateTimerData();
     },
   };
 
