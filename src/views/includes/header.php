@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <?php require_once('favicons.php') ?>
   <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,700" rel="stylesheet">
   <title><?=isset($title) ? $title . ' – YourSchoolBuddy' : 'YourSchoolBuddy'?></title>
 </head>
 <body>

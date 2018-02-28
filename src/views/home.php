@@ -38,9 +38,9 @@
         <?php foreach ($exams->upcoming as $upcoming_exam): ?>
           <li>
             <section>
-              <span class="subject-name"><?=$upcoming_exam->subject_name?></span>:
-              <span><?=date_format(date_create($upcoming_exam->date), 'l, F \t\h\e jS');?></span>,
-              <span><?=$upcoming_exam->type?></span>
+              <p class="exam-subject-name"><?=$upcoming_exam->subject_name?></p>
+              <p class="exam-date"><?=date_format(date_create($upcoming_exam->date), 'l, F \t\h\e jS');?></p>
+              <p class="exam-type"><?=$upcoming_exam->type?></p>
             </section>
             <section class="exam-management">
               <a class="edit-btn" href="/edit_exam/<?=$upcoming_exam->id?>">Edit</a>
@@ -54,7 +54,7 @@
           </li>
         <?php endforeach ?>
       <?php else: ?>
-        <li>There are no exams here.</li>
+        <li class="placeholder-full">There are no exams here.</li>
       <?php endif ?>
     </ul>
   </section>
@@ -82,7 +82,7 @@
           </li>
         <?php endforeach ?>
       <?php else: ?>
-        <li>There are no exams here.</li>
+        <li class="placeholder-full">There are no exams here.</li>
       <?php endif ?>
     </ul>
   </section>

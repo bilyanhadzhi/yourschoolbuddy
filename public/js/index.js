@@ -285,10 +285,14 @@ document.addEventListener('DOMContentLoaded', function() {
       this.buttons.startPauseButtonEl.textContent = this.state.isRunning ? 'Pause' : 'Start';
     },
     updateBarStatus: function() {
+      this.bottomBar.statusEl.textContent = '';
       if (!this.state.isRunning && this.state.currentTime === this.times.work) {
         this.bottomBar.statusEl.textContent = 'not running';
       } else {
-        this.bottomBar.statusEl.textContent = this.state.isInWorkingMode ? 'working' : 'resting';
+        if (!this.state.isRunning) {
+          this.bottomBar.statusEl.textContent += 'paused, ';
+        }
+        this.bottomBar.statusEl.textContent += this.state.isInWorkingMode ? 'studying' : 'resting';
       }
     },
     updateBarColor: function() {

@@ -3,6 +3,8 @@
 <div class="container">
   <?php require_once('includes/flash_box.php') ?>
 
+  <h2 class="student-name-header green">Stats for <?=$student->name?></h3>
+
   <section class="range-selection-container">
     <select name="range-select" id="range-select">
       <option selected value="range_start=<?=date('Y-m-d', strtotime('monday this week'))?>&range_end=<?=date('Y-m-d', strtotime('sunday this week'))?>">This week</option>
