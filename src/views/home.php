@@ -66,9 +66,9 @@
         <?php foreach ($exams->past as $past_exam): ?>
           <li>
             <section>
-              <span class="subject-name"><?=$past_exam->subject_name?></span>:
-              <span><?=date_format(date_create($past_exam->date), 'l, F \t\h\e jS');?></span>,
-              <span><?=$past_exam->type?></span>
+              <p class="exam-subject-name"><?=$past_exam->subject_name?></p>
+              <p class="exam-date"><?=date_format(date_create($past_exam->date), 'l, F \t\h\e jS');?></p>
+              <p class="exam-type"><?=$past_exam->type?></p>
             </section>
             <section class="exam-management">
               <a class="edit-btn" href="/edit_exam/<?=$past_exam->id?>">Edit</a>
