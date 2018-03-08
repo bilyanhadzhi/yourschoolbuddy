@@ -217,9 +217,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
           if (self.state.isRunning) {
             self.pause();
-            if (data.is_running !== 0) {
-              self.endStudySession();
-            }
           } else {
             if (data.is_running === 1) {
               alert('A timer is already running');
