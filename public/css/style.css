@@ -261,6 +261,13 @@ input[type="submit"] {
 }
 
 /* 'Add exam' form styles */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Caret_down_font_awesome.svg/256px-Caret_down_font_awesome.svg.png') right / 16px no-repeat #fff;
+  padding-right: 20px;
+}
+
 .add-exam-form {
   display: flex;
   align-items: center;
